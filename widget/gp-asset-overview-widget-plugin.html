@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-group">
+    <div class="col-md-3">
+      <div class="card outer-div" *ngIf="!isBusy">
+        <ng-container *ngTemplateOutlet="treeViewList; context:{$implicit:dataSource, role:'tree', depth: '0'}">
+        </ng-container>
+        <ng-template #treeViewList let-list let-depth="depth">
+          <ul [attr.role]="role" style="border: 0px !important;">
+            <li *ngFor="let asset of list;let i=index" [depth]="depth" [ngClass]="!asset.visible ? 'expanded': ''"
+              [attr.aria-expanded]="!asset.visible" class="item node-item">
+              <!-- <span><button type="button" class="btn btn-default btn-icon" (click)="expandAsset(asset);loadAssetData(asset)"><i c8yIcon="chevron-right"></i></button></span> -->
+              <span class="asset-name text-truncate"><button type="button" class="btn btn-default btn-icon" (click)="expandAsset(asset);loadAssetData(asset)"><i c8yIcon="chevron-right"></i></button>{{asset.name}}</span>
+              <ng-container *ngTemplateOutlet="treeViewList;
+                              context:{$implicit: asset.children, role:'group',  depth: '+1'}">                 
+              </ng-container>
+            </li>
+          </ul>
+        </ng-template>
+      </div>
+    </div>
+    <div class="col-md-9" *ngIf="!isBusy">
+      <!-- <div class="row" style="background-color: rgb(243, 137, 0);"> -->
+      <div *ngFor="let data of matData">
+        <ng-container *ngIf="data && data.id !== undefined">
+          <div class="card col-md-12 assetCard">
+            <span class="assetName">{{data.name}}</span>
+            <hr style="margin-top: 5px;">
+            <div class="">
+              <div class="card-group">
+                <div class="card-dashboard">
+                  <span *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"><img [src]="data.assetImage"
+                      style="width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></span>
+                  <span *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i [c8yIcon]="markerIcon"
+                      style="font-size:110px;width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
+                </div>
+                <div class="card-content-item">
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let col of config.selectedInputLabels;let i=index">{{col}} : </li>
+                  </ul>
+                </div>
+                
+                <div class="card-content-item card-text-value" *ngIf="data">
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let col of config.selectedInputs">
+                      {{data[col]}}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+<div *ngIf="isBusy">
+  <c8y-loading></c8y-loading>
+</div>

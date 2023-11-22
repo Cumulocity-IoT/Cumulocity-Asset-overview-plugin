@@ -1,0 +1,91 @@
+{
+  "name": "cumulocity-asset-overview-widget",
+  "version": "1018.486.5",
+  "description": "This is the Cumulocity module federation plugin. Plugins can be developed like any Cumulocity application, but can be used at runtime by other applications. Therefore, they export an Angular module which can then be imported by any other application. The exports are defined in `package.json`:",
+  "scripts": {
+    "start": "c8ycli server -u https://appbuilder.eu-latest.cumulocity.com/",
+    "build": "c8ycli build --env.mode=development",
+    "deploy": "c8ycli deploy",
+    "postinstall": "ngcc",
+    "prebuild": " gulp clean",
+    "postbuild": " gulp bundle"
+  },
+  "keywords": [
+    "Cumulocity",
+    "Plugin",
+    "Widget"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@angular/animations": "15.2.7",
+    "@angular/cdk": "15.2.7",
+    "@angular/common": "15.2.7",
+    "@angular/compiler": "15.2.7",
+    "@angular/material": "15.2.7",
+    "@angular/core": "15.2.7",
+    "@angular/forms": "15.2.7",
+    "@angular/platform-browser": "15.2.7",
+    "@angular/platform-browser-dynamic": "15.2.7",
+    "@angular/router": "15.2.7",
+    "@angular/upgrade": "15.2.7",
+    "fontawesome": "4.7.2",
+    "font-awesome": "^4.7.0",
+    "@ng-select/ng-select": "^9.1.0",
+    "@c8y/client": "1018.0.151",
+    "@c8y/ngx-components": "1018.0.151",
+    "@c8y/style": "1018.0.151",
+    "@ngx-translate/core": "14.0.0",
+    "ngx-bootstrap": "10.2.0",
+    "rxjs": "~6.6.3",
+    "zone.js": "~0.11.7"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "15.2.7",
+    "@angular/compiler-cli": "15.2.7",
+    "@angular/language-service": "15.2.7",
+    "@angular/service-worker": "15.2.7",
+    "@angular/localize": "15.2.7",
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3",
+    "jest-preset-angular": "^12.2.5",
+    "typescript": "4.9.5",
+    "@c8y/cli": "1018.486.5",
+    "gulp": "^4.0.2",
+    "gulp-zip": "^5.0.1",
+    "del": "^6.1.1",
+    "html-loader": "4.1.0"
+  },
+  "c8y": {
+    "application": {
+      "name": "cumulocity-asset-overview-widget",
+      "description": "Custom widget with module federation",
+      "contextPath": "cumulocity-asset-overview-widget",
+      "key": "cumulocity-asset-overview-widget-application-key",
+      "globalTitle": "Custom widget with Module Federation",
+      "brandingEntry": "./widget/styles.less",
+      "tabsHorizontal": true,
+      "isPackage": true,
+      "noAppSwitcher": true,
+      "package": "plugin",
+      "requiredPlatformVersion": ">=1018.0.0",
+      "exports": [
+        {
+          "name": "Asset Overview widget plugin",
+          "module": "GpAssetOverviewWidgetPluginModule",
+          "path": "./widget/gp-asset-overview-widget-plugin.module.ts",
+          "description": "Adds a custom widget to the shell application"
+        }
+      ],
+      "remotes": {
+        "widget-plugin": [
+          "GpAssetOverviewWidgetPluginModule"
+        ]
+      }
+    },
+    "cli": {}
+  },
+  "browserslist": [
+    "last 2 major versions"
+  ]
+}

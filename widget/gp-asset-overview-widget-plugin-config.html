@@ -1,0 +1,79 @@
+<div class="col-md-12">
+  <br>
+  <label>Upload Default Icon For Device</label>
+  <asset-overview-icon-selector id="assetOverviewMarkerIcon" name="assetOverviewMarkerIcon"
+    [(value)]="config.markerIcon"></asset-overview-icon-selector>
+</div>
+<div class="col-md-12">
+  <label>Table Inputs: </label>
+  <ng-container>
+    <ng-select [items]="propertiesToDisplayList" [multiple]="true" bindLabel="label" bindValue="id"
+      [closeOnSelect]="false" [(ngModel)]="config.selectedInputs" (ngModelChange)="onColChange()"
+      placeHolder='Select Table Fields'>
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.label}}
+      </ng-template>
+    </ng-select>
+    <div *ngIf="otherPropList" class="mt-10">
+      <b>Since you selected Other, property name and value must be entered </b>
+      <a class="btn btn-default btn-xs" (click)="addProperty()" style="margin-left:20px;">
+        <i c8y-icon="plus" class="dlt-c8y-icon-plus"></i>
+        Add property
+      </a>
+      <br />
+    </div>
+    <ng-container *ngIf="otherPropList">
+      <div *ngFor="let property of config.otherPropList; let i = index" class="mt-10">
+        <label>Label </label>
+        <input type="text" class="form-control input-width" placeholder="eg. Position" [(ngModel)]="property.label"
+          required>
+        <label>Value </label>
+        <input type="text" class="form-control input-width" placeholder="eg. c8y_Position" [(ngModel)]="property.value"
+          required>
+        <a class="btn btn-default btn-xs mt-10" (click)="removeProperty(i)">
+          <i c8y-icon="minus" class="dlt-c8y-icon-minus"></i>
+          Remove
+        </a>
+      </div>
+    </ng-container>
+  </ng-container>
+
+
+   
+<div class="config-accordion">
+  <button class="btn btn-default input-width" (click)="isExpandedDBS = !isExpandedDBS" type="button">
+    <div class="pull-left float-left">Dashboard Settings
+    </div>
+    <span class="float-right pull-right"><i *ngIf="isExpandedDBS" class="fa fa-caret-up"></i>
+      <i *ngIf="!isExpandedDBS" class="fa fa-caret-down"></i></span>
+  </button>
+  <div class="config-accordion" id="isExpandedDBS" *ngIf="isExpandedDBS">
+    <div class="row" *ngFor="let dashboard of config.dashboardList;let i = index">
+      <div class="col-sm-12" *ngIf="dashboard.type">
+        <div class="col-sm-3">
+          <ng-select [items]="deviceTypes" bindLabel="type" [closeOnSelect]="false" [searchable]="true"
+            placeholder="Select Device Type" appendTo="body" (change)="addNewRecord(i)" bindValue="type" [(ngModel)]="dashboard.type">
+          </ng-select>
+        </div>
+        <div class="col-sm-3">
+          <input type="text" id="dashboarId{{i}}" class="form-control input-width" placeholder="Dashboard ID"
+            [(ngModel)]="dashboard.templateID">
+        </div>
+        <div class="col-sm-3">
+          <div class="btn-group device-list-switch-toggle ">
+            <label class="c8y-switch ">
+              <input type="checkbox" id="withTabGroup{{i}}" [checked]="dashboard.withTabGroup"
+                [(ngModel)]="dashboard.withTabGroup">
+              <span></span> DeviceId as TabGroup
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-3" *ngIf="!dashboard.withTabGroup">
+          <input type="text" id="tabGroupID{{i}}" class="form-control input-width" placeholder="TabGroup ID(Optional)"
+            [(ngModel)]="dashboard.tabGroupID">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
