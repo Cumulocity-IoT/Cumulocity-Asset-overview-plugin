@@ -96,11 +96,13 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
         this.dataSource = [{
           name: this.config.device.name,
           children: this.config.childDevices,
-          visible: true
+          visible: true,
+          isRoot: true
         }];
       } else {
         this.dataSource.children = this.config.childDevices;
         this.dataSource.visible = true;
+        this.dataSource.isRoot = true;
       }
     }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {

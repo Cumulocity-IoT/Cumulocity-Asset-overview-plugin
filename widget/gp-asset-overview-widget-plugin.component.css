@@ -109,8 +109,13 @@ li>span:hover {
     content: "";
     height: 64px;
     position: absolute;
-    transform: translate(-17px, -32px);
+    transform: translate(-40px, -40px);
     width: 17px;
+}
+
+.asset-viewer-root:before {
+    border-bottom: none !important;
+    border-left: none !important;
 }
 
 .c8y-tree-view-node__block {

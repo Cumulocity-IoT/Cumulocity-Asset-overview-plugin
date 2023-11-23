@@ -5,8 +5,8 @@
         <ng-container *ngTemplateOutlet="treeViewList; context:{$implicit:dataSource, role:'tree'}">
         </ng-container>
         <ng-template #treeViewList let-list let-class="class">
-          <ul [attr.role]="role" style="border: 0px !important;">
-            <li *ngFor="let asset of list;let i=index" [ngClass]="!asset.visible ? 'expanded': ''" [class]="class"
+          <ul [attr.role]="role" >
+            <li *ngFor="let asset of list;let i=index" [ngClass]="{'expanded' : !asset.visible, 'asset-viewer-root' : asset.isRoot}" [class]="class"
               [attr.aria-expanded]="!asset.visible" class="asset-c8y-tree-view-node" style="padding-left: calc(var(--indent)*16px);">
               <div class="c8y-tree-view-node__block">
                 <span class="asset-name text-truncate"

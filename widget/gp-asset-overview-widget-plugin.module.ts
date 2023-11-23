@@ -17,10 +17,7 @@ import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.
   imports: [
     CommonModule,
     FormsModule,
-
-    BrowserAnimationsModule,
-    RouterModule.forRoot([]),
-    CoreModule.forRoot(),
+    CoreModule,
     NgSelectModule,
     MatTableModule
   ],
