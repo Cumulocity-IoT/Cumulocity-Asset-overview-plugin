@@ -63,7 +63,7 @@ li>span:hover {
     font-size: 16px;
     font-weight: 500;
     display: inline-block;
-    margin-top:5px;
+    margin-top: 5px;
 }
 
 .assetCard {
@@ -71,6 +71,7 @@ li>span:hover {
     border-radius: 5px;
     margin-bottom: 20px !important;
 }
+
 .config-accordion {
     padding-bottom: 10px;
 }
@@ -79,43 +80,54 @@ li>span:hover {
     font-size: 12px;
 }
 
-.config-accordion input, .config-accordion select, .config-accordion ng-select {
+.config-accordion input,
+.config-accordion select,
+.config-accordion ng-select {
     font-size: 12px;
     margin: 5px;
 }
-.item {
-    position: relative;
-    cursor: pointer;
-    background-color: unset;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    display: inherit;
-    border: 1px solid #ccd2d6;
-    color: var(--brand-dark);
-}
-.item {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
 
-.item .sub-child {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding: 0px 0 0px 8px;
-}
-
-/* .sub-child:last-child {
-    border: none;
-} */
-.node-item {
-    overflow: hidden;
-    min-height: 10px;
-    cursor: pointer;
-}
 .asset-name {
-    margin-left:10px;
+    margin-left: 10px;
     font-size: 14px;
     color: rgb(1, 31, 61);
     font-family: Roboto, Helvetica, Arial, sans-serif;
+    margin-top: 12px;
+}
+
+.asset-c8y-tree-view-node {
+    position: relative;
+    display: block;
+}
+
+.expanded.asset-c8y-tree-view-node:before {
+    border-width: 1px;
+    border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-right: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-top: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    content: "";
+    height: 64px;
+    position: absolute;
+    transform: translate(-17px, -32px);
+    width: 17px;
+}
+
+.c8y-tree-view-node__block {
+    /*box-shadow: inset -1px 0 0 0 var(--c8y-component-border-color,var(--c8y-root-component-border-color));
+    display: flex;*/
+    margin-bottom: var(--c8y-unit-base);
+    min-height: calc(var(--c8y-unit-base)*6);
+    border: 1px solid #ccc6;
+    border-radius: 0px;
+}
+
+li.expanded:last-child>.asset-c8y-tree-view-node:before {
+    border-left-color: transparent !important;
+}
+
+.list-group {
+    display: grid;
+    grid-template-rows: repeat(5, min-content);
+    grid-auto-flow: column;
 }
