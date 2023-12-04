@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SELECTION_MODEL_FACTORY } from '@ng-select/ng-select';
 import { DynamicComponent } from '@c8y/ngx-components';
 import { DefaultSelectionModelFactory } from '../widget/icon-selector/selection-model'
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
 import { InventoryService } from '@c8y/client';
+import { MatTableDataSource } from '@angular/material/table';
 
 export interface Property {
   id: any;
@@ -29,8 +30,7 @@ export interface DashboardConfig {
 })
 
 export class GPAssetOverviewWidgetPluginConfig implements OnInit {
-
-  propertiesToDisplayList: Property[] = [];
+  propertiesToDisplay: Property[] = [];
   @Input() config: any = {};
   appId = null;
   managedObject: any;
@@ -38,10 +38,19 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   markerIcon: any;
   deviceFile: any;
   busy: false;
+  isExpandedP1 = false;
+  isExpandedFP = false;
+  
+  isExpandedP2 = false;
   isExpandedDBS = false;
+  props = new FormControl();
+  p1Props;
   dashboardList: DashboardConfig[] = [];
   deviceTypes = null;
-
+  p1DataSource = new MatTableDataSource<Property>([]);
+  p2DataSource = new MatTableDataSource<Property>([]);
+  displayedColumns: string[] = ['label', 'property'];
+  p2Props;
   exemptedValues: string[] = [
     'additionParents',
     'assetParents',
@@ -55,39 +64,18 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   ];
   otherPropList: boolean = false;
   selected: any;
+  otherProp: boolean;
 
 
-  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,) { }
+  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,private fb: FormBuilder,) { }
 
   async ngOnInit(): Promise<void> {
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
     }
     this.getAllDevices(this.config.device.id);
+   
 
-    this.propertiesToDisplayList = [
-      { id: 'id', label: 'ID', value: 'id' },
-      { id: 'name', label: 'Name', value: 'name' },
-      { id: 'owner', label: 'Owner', value: 'owner' },
-      { id: 'childDeviceAvailable', label: 'Child devices', value: 'childDeviceAvailable' },
-      { id: 'c8y_AvailabilityStatus', label: 'Availability status', value: 'c8y_Availability.status' },
-      { id: 'c8y_ConnectionStatus', label: 'Connection status', value: 'c8y_Connection.status' },
-      { id: 'c8y_FirmwareName', label: 'Firmware name', value: 'c8y_Firmware.name' },
-      { id: 'c8y_FirmwareVersion', label: 'Firmware version', value: 'c8y_Firmware.version' },
-      { id: 'c8y_FirmwareVersionIssues', label: 'Firmware verison issues', value: 'c8y_Firmware.versionIssues' },
-      { id: 'c8y_FirmwareVersionIssuesName', label: 'Firmware issue name', value: 'c8y_Firmware.versionIssuesName' },
-      { id: 'c8y_RequiredAvailabilityResponseInterval', label: 'Required availability', value: 'c8y_RequiredAvailability.responseInterval' },
-      { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
-      { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
-      { id: 'externalId', label: 'External id', value: 'deviceExternalDetails.externalId' },
-      { id: 'externalType', label: 'External type', value: 'deviceExternalDetails.externalType' },
-      { id: 'c8y_Notes', label: 'Notes', value: 'c8y_Notes' },
-      { id: 'type', label: 'Type', value: 'type' },
-      { id: 'c8y_CommunicationMode', label: 'Communication Mode', value: 'c8y_CommunicationMode.mode' },
-      { id: 'c8y_HardwareModel', label: 'Hardware Model', value: 'c8y_Hardware.model' },
-      { id: 'c8y_ActiveAlarmsStatus', label: 'Active alarms status', value: 'c8y_ActiveAlarmsStatus' },
-      { id: 'other', label: 'Other', value: 'other' }
-    ];
     if (!this.config.selectedInputs) {
       this.config.selectedInputs = ['id', 'name', 'deviceExternalDetails.externalId', 'lastUpdated', 'c8y_Availability.status', 'c8y_ActiveAlarmsStatus'];
     }
@@ -102,7 +90,130 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       this.config.dashboardList = this.dashboardList;
     }
 
-    await this.getLabelForKey();
+    this.propertiesToDisplay = [
+      { id: 'id', label: 'ID', value: 'id' },
+      { id: 'name', label: 'Name', value: 'name' },
+      { id: 'owner', label: 'Owner', value: 'owner' },
+      //{ id: 'childDeviceAvailable', label: 'Child devices', value: 'childDeviceAvailable' },
+      { id: 'c8y_AvailabilityStatus', label: 'Availability status', value: 'c8y_AvailabilityStatus' },
+      { id: 'c8y_ConnectionStatus',label: 'Connection status', value: 'c8y_ConnectionStatus' },
+      { id: 'c8y_FirmwareName', label: 'Firmware name', value: 'c8y_FirmwareName' },
+      { id: 'c8y_FirmwareVersion', label: 'Firmware version', value: 'c8y_FirmwareVersion' },
+      { id: 'c8y_FirmwareVersionIssues', label: 'Firmware verison issues', value: 'c8y_FirmwareVersionIssues' },
+      { id: 'c8y_FirmwareVersionIssuesName', label: 'Firmware issue name', value: 'c8y_FirmwareVersionIssuesName' },
+      {
+        id: 'c8y_RequiredAvailabilityResponseInterval'
+        , label: 'Required availability', value: 'c8y_RequiredAvailabilityResponseInterval'
+      },
+      { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
+      { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
+      { id: 'externalId', label: 'External id', value: 'externalId' },
+      { id: 'externalType', label: 'External type', value: 'externalType' },
+      { id: 'c8y_ActiveAlarmsStatus', label: 'Active alarms status', value: 'c8y_ActiveAlarmsStatus' },
+      { id: 'other', label: 'Other', value: 'other' }
+    ];
+    if (!this.config.fpProps) {
+      this.config.fpProps = ['Availability', 'ActiveAlarmsStatus'];
+    } else {
+      if (this.config.fpProps.indexOf('Other') > -1) {
+        this.otherProp = true;
+      }
+    }
+    if (!this.config.selectedInputs) {
+      this.config.selectedInputs = ['id', 'name', 'deviceExternalDetails.externalId', 'lastUpdated', 'c8y_Availability.status', 'c8y_ActiveAlarmsStatus'];
+    }
+    if (this.config.selectedInputs && this.config.selectedInputs.indexOf('other') !== -1) {
+      this.otherPropList = true;
+    }
+    this.p1Props = this.fb.group({
+      p1Props: [null, Validators.required]
+    });
+    this.p2Props = this.fb.group({
+      p2Props: [null, Validators.required]
+    });
+    let prop1;
+    if (!this.config.p1Props) {
+      this.config.p1Props = undefined;
+    } else {
+      prop1 = this.propertiesToDisplay.filter(prop => {
+        let ele;
+        this.config.p1Props.forEach(element => {
+          if (prop.id === element.id) {
+            prop.id === 'other' ? (() => {
+              prop.label = element.label;
+              prop.value = element.value;
+              // tslint:disable-next-line:no-unused-expression
+            })() : '';
+            ele = prop;
+          }
+        });
+        return ele;
+      });
+    }
+    let prop2;
+    if (!this.config.p2Props) {
+      this.config.p2Props = undefined;
+    } else {
+      prop2 = this.propertiesToDisplay.filter(prop => {
+        let ele = '';
+        this.config.p2Props.forEach(element => {
+          if (prop.id === element.id) {
+            prop.id === 'other' ? (() => {
+              prop.label = element.label;
+              prop.value = element.value;
+              // tslint:disable-next-line:no-unused-expression
+            })() : '';
+            ele = element;
+          }
+        });
+        return ele;
+      });
+    }
+    if (!this.config.otherProp) {
+      this.config.otherProp = { label: '', value: '' };
+    }
+
+    if (!this.config.otherPropList) {
+      this.config.otherPropList = [{ label: '', value: '' }];
+    }
+
+    this.props.setValue(this.config.fpProps);
+    this.p1Props.get('p1Props').setValue(prop1);
+    this.p2Props.get('p2Props').setValue(prop2);
+    if (prop1) {
+      this.p1DataSource.data = JSON.parse(JSON.stringify(this.p1Props.get('p1Props').value));
+    }
+    if (prop2) {
+      this.p2DataSource.data = JSON.parse(JSON.stringify(this.p2Props.get('p2Props').value));
+    }
+
+    if (this.config.realtime === undefined) {
+      this.config.realtime = false;
+    }
+    if (this.config.isRuntimeExternalId === undefined) {
+      this.config.isRuntimeExternalId = false;
+    }
+    if (this.config.showChildDevices === undefined) {
+      this.config.showChildDevices = false;
+    }
+    
+  }
+
+  onP1Change() {
+    this.p1DataSource.data = JSON.parse(JSON.stringify(this.p1Props.get('p1Props').value));
+    this.config.p1Props = this.p1Props.get('p1Props').value;
+  }
+  onP2Change() {
+    this.p2DataSource.data = JSON.parse(JSON.stringify(this.p2Props.get('p2Props').value));
+    this.config.p2Props = this.p2Props.get('p2Props').value;
+  }
+
+  commitToP1PropsConfig(props) {
+    this.config.p1Props = props.data;
+  }
+
+  commitToP2PropsConfig(props) {
+    this.config.p2Props = props.data;
   }
   /**
    * Get All devices's device type
@@ -132,7 +243,6 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       this.otherPropList = false;
       this.config.otherPropList = [{ label: '', value: '' }];
     }
-    await this.getLabelForKey();
   }
 
 
@@ -146,19 +256,6 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
     this.config.otherPropList.push({ label: '', value: '' });
   }
 
-  getLabelForKey() {
-    this.config.selectedInputLabels = [];
-    if (this.config.selectedInputs) {
-      for (let i = 0; i < this.config.selectedInputs.length; i++) {
-        for (let j = 0; j < this.propertiesToDisplayList.length; j++) {
-          if (this.config.selectedInputs[i] === this.propertiesToDisplayList[j].id) {
-            this.config.selectedInputLabels.push(this.propertiesToDisplayList[j].label);
-          }
-        }
-      }
-    }
-    console.log("selected inputlabesl", this.config.selectedInputLabels);
-  }
   /**
    * Add new Row for Dashboard Settings
    */
@@ -169,4 +266,5 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       this.config.dashboardList.push(dashboardObj);
     }
   }
+  
 }

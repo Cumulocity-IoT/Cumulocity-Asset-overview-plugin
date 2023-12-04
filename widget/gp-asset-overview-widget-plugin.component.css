@@ -34,31 +34,6 @@ li>span:hover {
     box-shadow: none;
 }
 
-.card-content {
-    display: flex;
-    font-size: 14px;
-}
-
-.card-content-item {
-    padding: 5px;
-}
-
-.card-content-item span {
-    padding: 3px;
-    display: block;
-    max-width: 150px;
-    font-size: 14px;
-}
-
-.card-text-value span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: block;
-    width: 100px;
-    font-size: 14px;
-}
-
 .assetName {
     font-size: 16px;
     font-weight: 500;
@@ -66,25 +41,15 @@ li>span:hover {
     margin-top: 5px;
 }
 
+.iconClass {
+    position: relative;
+    top: -5px;
+}
+
 .assetCard {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 20px !important;
-}
-
-.config-accordion {
-    padding-bottom: 10px;
-}
-
-.config-accordion label {
-    font-size: 12px;
-}
-
-.config-accordion input,
-.config-accordion select,
-.config-accordion ng-select {
-    font-size: 12px;
-    margin: 5px;
 }
 
 .asset-name {
@@ -110,7 +75,7 @@ li>span:hover {
     height: 64px;
     position: absolute;
     transform: translate(-40px, -40px);
-    width: 17px;
+    width: 40px;
 }
 
 .asset-viewer-root:before {
@@ -135,4 +100,70 @@ li.expanded:last-child>.asset-c8y-tree-view-node:before {
     display: grid;
     grid-template-rows: repeat(5, min-content);
     grid-auto-flow: column;
+}
+
+.list-group-content {}
+
+.c8y-tree-view-node__block:hover {
+    /* Add your desired hover effect styles here */
+    background-color: rgb(173, 233, 235);
+    cursor: pointer;
+    /* Add any other styles you want on hover */
+}
+
+.collapse-expand-icon {
+    float: right;
+    margin-top: 12px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.text-truncate {
+    display: inline-block !important;
+}
+
+.criticalAlerts {
+    background-color: #e0000e;
+}
+
+.majorAlerts {
+    background-color: #e66400;
+}
+
+.minorAlerts {
+    background-color: #ff801f;
+}
+
+.warningAlerts {
+    background-color: #1c8ce3;
+}
+
+.criticalAlerts2 {
+    color: #e0000e;
+}
+
+.majorAlerts2 {
+    color: #e66400;
+}
+
+.minorAlerts2 {
+    color: #ff801f;
+}
+
+.warningAlerts2 {
+    color: #1c8ce3;
+}
+
+.majorAlert {
+    color: #e66400;
+}
+
+td {
+    border-bottom: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.active>div {
+    background-color: rgb(173, 233, 235);
 }

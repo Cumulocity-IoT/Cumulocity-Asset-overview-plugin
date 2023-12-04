@@ -1,26 +1,39 @@
 <div class="card">
   <div class="card-group">
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="card" *ngIf="!isBusy">
         <ng-container *ngTemplateOutlet="treeViewList; context:{$implicit:dataSource, role:'tree'}">
         </ng-container>
-        <ng-template #treeViewList let-list let-class="class">
-          <ul [attr.role]="role" >
-            <li *ngFor="let asset of list;let i=index" [ngClass]="{'expanded' : !asset.visible, 'asset-viewer-root' : asset.isRoot}" [class]="class"
-              [attr.aria-expanded]="!asset.visible" class="asset-c8y-tree-view-node" style="padding-left: calc(var(--indent)*16px);">
-              <div class="c8y-tree-view-node__block">
-                <span class="asset-name text-truncate"
-                  (click)="expandAsset(asset);loadAssetData(asset)">{{asset.name}}</span>
+        <ng-template #treeViewList let-list>
+          <ul [attr.role]="role">
+            <li *ngFor="let asset of list;let i=index" [class.active]="selectedAsset===asset.id"
+              [ngClass]="{'expanded' : !asset.visible}" [attr.aria-expanded]="!asset.visible"
+              class="asset-c8y-tree-view-node" style="padding-left: calc(var(--indent)*16px);">
+              <div class="c8y-tree-view-node__block" (click)="expandAsset(asset);loadAssetData(asset)">
+                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-device" *ngIf="asset.c8y_IsDevice"></i>
+                <i class="iconClass c8y-icon c8y-icon-duocolor dlt-c8y-icon-ios-themes" *ngIf="asset.c8y_IsAsset"></i>
+                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-group"
+                  *ngIf="!asset.c8y_IsDevice && !asset.c8y_IsAsset"></i>
+
+                <span class="asset-name text-truncate">{{asset.name}}</span>
+
+                <i *ngIf="asset.type === 'device'"></i>
+                <i class="collapse-expand-icon"
+                  [ngClass]="asset.children && objectKeys(asset.children).length === 0 ? 'empty-space': ''"
+                  id="collapse-button"
+                  [c8yIcon]="asset.children && objectKeys(asset.children).length > 0  ?  (!asset.visible ?  'collapse-arrow': 'expand-arrow') : '' "></i>
               </div>
               <ng-container *ngTemplateOutlet="treeViewList;
-                              context:{$implicit: asset.children, role:'group',class:'assetTree'}">
+                              context:{$implicit: asset.children, role:'group'}">
               </ng-container>
             </li>
           </ul>
         </ng-template>
       </div>
+
+
     </div>
-    <div class="col-md-9" *ngIf="!isBusy">
+    <div class="col-md-8" *ngIf="!isBusy">
       <!-- <div class="row" style="background-color: rgb(243, 137, 0);"> -->
       <div *ngFor="let data of matData">
         <ng-container *ngIf="data && data.id !== undefined">
@@ -35,20 +48,54 @@
                   <span *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i [c8yIcon]="markerIcon"
                       style="font-size:110px;width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
                 </div>
-                <div class="card-content-item">
-                  <ul class="list-group">
-                    <li class="list-group-item" *ngFor="let col of config.selectedInputLabels;let i=index">{{col}} :
-                    </li>
-                  </ul>
-                </div>
 
-                <div class="card-content-item card-text-value" *ngIf="data">
-                  <ul class="list-group">
-                    <li class="list-group-item" *ngFor="let col of config.selectedInputs">
-                      {{data[col]}}
-                    </li>
-                  </ul>
-                </div>
+                <table class="two-column-table">
+                  <tbody>
+                    <ng-container *ngFor="let page1 of config.p1Props;">
+                      <tr>
+                        <td>{{ page1.label }} :</td>
+                        <td *ngIf="page1.id === 'c8y_ActiveAlarmsStatus'">
+                          <span *ngIf="isAlerts(data.alertDetails)" [ngClass]="isAlertsColor(data.alertDetails)"
+                            title="{{loadText(data.alertDetails)}}">
+                            <span class="badge " [ngClass]="isAlertsBGColor(data.alertDetails)">
+                              {{getTotalAlerts(data.alertDetails)}}</span>
+                          </span>
+                        </td>
+                        <td *ngIf="page1.id === 'creationTime' || page1.id === 'lastUpdated';"
+                          title="{{ getTheValue(data, page1.value)  | date:'d MMMM yyyy HH:mm'}}">
+                          {{ getTheValue(data, page1.value) === undefined || getTheValue(data, page1.value).length ===
+                          0?
+                          'Not available' : getTheValue(data, page1.value) | date:'d MMMM yyyy HH:mm' }}
+                        </td>
+                        <td *ngIf="page1.id !== 'creationTime' && page1.id !== 'lastUpdated';">{{ getTheValue(data,
+                          page1.value)}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <table class="two-column-table" style="margin-left:30px;">
+                  <tbody>
+                    <ng-container *ngFor="let page2 of config.p2Props;">
+                      <tr>
+                        <td>{{ page2.label }} :</td>
+                        <td *ngIf="page2.id === 'c8y_ActiveAlarmsStatus'">
+                          <span [ngClass]="isAlertsColor(data.alertDetails)" title="{{loadText(data.alertDetails)}}">
+                            <span class="badge " [ngClass]="isAlertsBGColor(data.alertDetails)">
+                              {{getTotalAlerts(data.alertDetails)}}</span>
+                          </span>
+                        </td>
+                        <td *ngIf="page2.id === 'creationTime' || page2.id === 'lastUpdated';"
+                          title="{{ getTheValue(data, page2.value)  | date:'d MMMM yyyy HH:mm'}}">
+                          {{ getTheValue(data, page2.value) === undefined || getTheValue(data, page2.value).length ===
+                          0?
+                          'Not available' : getTheValue(data, page2.value) | date:'d MMMM yyyy HH:mm' }}
+                        </td>
+                        <td *ngIf="page2.id !== 'creationTime' && page2.id !== 'lastUpdated';">{{ getTheValue(data,
+                          page2.value)}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

@@ -35,6 +35,7 @@ export interface DeviceData {
   assetImage?: any;
   externalId?: string;
   externalType?: string;
+  c8y_ActiveAlarmsStatus?: any;
 }
 
 @Component({
@@ -57,6 +58,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   isBusy = false;
   otherProp: any;
   matData: any = [];
+  selectedAsset: any;
   //depth = '0';
   private _transformer = (node: Node, level: number) => {
     return {
@@ -64,7 +66,16 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       level: level,
     };
   };
+// In your component class
+// Initialize a variable to track the level
+level: number = 0;
 
+// Function to increase the level when rendering nested levels
+increaseLevel() {
+  this.level++;
+}
+
+  objectKeys = Object.keys;
   dataSource: any;
   dynamicDisplayColumns = [];
   displayedColumnsForList: string[] = [];
@@ -73,8 +84,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService, private sanitizer: DomSanitizer, private router: Router) {
   }
   async ngOnInit() {
-    
-    this.appId = await this.deviceList.getAppId();console.log("appid:",this.appId);
+
+    this.appId = await this.deviceList.getAppId(); 
     if (!this.config.device) {
       this.config.device = {};
     }
@@ -94,15 +105,23 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       }
       if (!inventory.data.hasOwnProperty('c8y_IsDevice')) {
         this.dataSource = [{
+          id: this.config.device.id,
           name: this.config.device.name,
           children: this.config.childDevices,
-          visible: true,
-          isRoot: true
+          visible: true
         }];
+        //Expand First Level
+        this.expandAsset(this.dataSource[0]);
+        this.loadAssetData(this.dataSource[0]);
+        this.selectedAsset = this.dataSource[0].id;
       } else {
+        this.dataSource.id = this.config.device.id;
         this.dataSource.children = this.config.childDevices;
         this.dataSource.visible = true;
-        this.dataSource.isRoot = true;
+        //Expand First Level
+        this.expandAsset(this.dataSource);
+        this.loadAssetData(this.dataSource);
+        this.selectedAsset = this.dataSource.id;
       }
     }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
@@ -129,6 +148,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     // Split selectedInputs and selectedInputLabels into groups of five
     this.groupedInputs = this.chunkArray(this.selectedInputs, 5);
     this.groupedLabels = this.chunkArray(this.selectedInputLabels, 5);
+    console.log("Datasource", this.dataSource);
   }
 
   // Function to split array into chunks
@@ -141,9 +161,10 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   }
 
   // Navigate URL to dashboard if dashboard is exist
-  navigateURL(deviceId: string, deviceType: string) {console.log("navigator clicked id:"+deviceId+" type:"+deviceType);
+  navigateURL(deviceId: string, deviceType: string) {
+    console.log("navigator clicked id:" + deviceId + " type:" + deviceType);
     if (deviceType && this.appId) {
-    // if (deviceType) {
+      // if (deviceType) {
       const dashboardObj = this.configDashboardList.find((dashboard) => dashboard.type === deviceType);
       if (dashboardObj && dashboardObj.templateID) {
         if (dashboardObj.withTabGroup) {
@@ -152,7 +173,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
         } else if (dashboardObj.tabGroupID) {
           this.router.navigate([
             `/application/${this.appId}/tabgroup/${dashboardObj.tabGroupID}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
-        } else {console.log("App id:",this.appId);
+        } else {
+          console.log("App id:", this.appId);
           this.router.navigate([`/application/${this.appId}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         }
       }
@@ -198,6 +220,16 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
           }
         }
       }
+      if (asset.childDevices.references.length > 0) {
+        for (const child of asset.childDevices.references) {
+          let childNode: any = await this.getDeviceDetails(child.managedObject.id);
+          //const childNode = map.get(child.managedObject.id);
+          if (childNode) {
+            parent?.children.push(childNode);
+            parent.visible = true;
+          }
+        }
+      }
       if (parent) {
         roots.push(map.get(asset.id)!);
       }
@@ -210,6 +242,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     return deviceFound.data;
   }
   expandAsset(devices) {
+    this.selectedAsset = devices.id;
     if (devices.children && devices.children.length > 0) {
       devices.visible = !devices.visible;
     }
@@ -233,13 +266,15 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
 
 
   async loadAssetData(asset: any) {
+    this.selectedAsset = asset.id;
     this.matData = [];
     let deviceData = await this.mapAssetData(asset);
     this.matData.push(deviceData);
     if (asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
+     
     }
-    console.log(this.matData);
+    console.log("mat",this.matData);
   }
 
   async mapAssetData(asset) {
@@ -255,62 +290,37 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     deviceData.type = asset.type;
     deviceData.lastUpdated = asset.lastUpdated;
     deviceData.creationTime = asset.creationTime;
-    deviceData.externalId = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalId : '';
-    deviceData.externalType = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalType : '';
+    deviceData.externalId = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalId : 'Not Available';
+    deviceData.externalType = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalType : 'Not Available';
     deviceData.owner = asset.owner ? asset.owner : 'Not available';
-    deviceData.c8y_ConnectionStatus = asset.c8y_Connection ? asset.c8y_Connection.status : undefined;
-    let availability = asset.c8y_Availability ? asset.c8y_Availability.status : undefined;
+    deviceData.c8y_ConnectionStatus = asset.c8y_Connection ? asset.c8y_Connection.status : 'Not Available';
+    let availability = asset.c8y_Availability ? asset.c8y_Availability.status : 'Not Available';
     alertDesc = (asset.hasOwnProperty('c8y_IsAsset')) ? await this.deviceList.getAlarmsForAsset(asset) : this.checkAlarm(asset, alertDesc);
     deviceData.assetImage = '';
-    deviceData.c8y_RequiredAvailabilityResponseInterval = asset.c8y_RequiredAvailability ? asset.c8y_RequiredAvailability.responseInterval : '';
-    deviceData.c8y_Notes = asset.c8y_Notes ? asset.c8y_Notes : '';
-    deviceData.c8y_CommunicationMode = asset.c8y_CommunicationMode ? asset.c8y_CommunicationMode.mode : '';
-    deviceData.c8y_HardwareModel = asset.c8y_Hardware ? asset.c8y_Hardware.model : '';
+    deviceData.c8y_RequiredAvailabilityResponseInterval = asset.c8y_RequiredAvailability ? asset.c8y_RequiredAvailability.responseInterval : 'Not Available';
+    deviceData.c8y_Notes = asset.c8y_Notes ? asset.c8y_Notes : 'Not Available';
+    deviceData.c8y_CommunicationMode = asset.c8y_CommunicationMode ? asset.c8y_CommunicationMode.mode : 'Not Available';
+    deviceData.c8y_HardwareModel = asset.c8y_Hardware ? asset.c8y_Hardware.model : 'Not Available';
     if (asset.image) {
       deviceData.assetImage = await this.loadAssetImage(asset.image);
     }
-    if (this.config.selectedInputs) {
-      this.config.selectedInputs.forEach(element => {
-        if (element === 'c8y_FirmwareVersion') {
-          deviceData.c8y_FirmwareVersion = (asset.c8y_Firmware && asset.c8y_Firmware.version) ? this.getFirmwareRiskForFilter(asset.c8y_Firmware.version) : 'Not available';
-        } else {
-          deviceData.c8y_FirmwareVersion = 'Not available';
-        }
-        if (element === 'c8y_FirmwareName') {
-          deviceData.c8y_FirmwareName = (asset.c8y_Firmware && asset.c8y_Firmware.name) ? asset.c8y_Firmware.name : 'Not available';
-        } else {
-          deviceData.c8y_FirmwareName = 'Not available';
-        }
-        if (element === 'c8y_FirmwareVersionIssues') {
-          deviceData.c8y_FirmwareVersionIssues = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssues) ? asset.c8y_Firmware.versionIssues : 'Not available';
-        } else {
-          deviceData.c8y_FirmwareVersionIssues = 'Not available';
-        }
-        if (element === 'c8y_FirmwareVersionIssuesName') {
-          deviceData.c8y_FirmwareVersionIssuesName = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssuesName) ? asset.c8y_Firmware.versionIssuesName : 'Not available';
-        } else {
-          deviceData.c8y_FirmwareVersionIssuesName = 'Not available';
-        }
-        if (element === 'c8y_AvailabilityStatus') {
-          deviceData.c8y_AvailabilityStatus = availability;
-        }
-        if (element === 'ActiveAlarmsStatus') {
-          deviceData.alertDetails = alertDesc;
-        }
-        if (element === 'c8y_ActiveAlarmsStatus') {
-          deviceData.alertDetails = alertDesc;
-        }
-        if (element === 'Other' && this.getTheValue(asset, this.otherProp.value) !== undefined) {
-          deviceData.other = this.getTheValue(asset, this.otherProp.value);
-          deviceData.other = JSON.stringify(deviceData.other);
-        }
+    deviceData.c8y_FirmwareVersion = (asset.c8y_Firmware && asset.c8y_Firmware.version) ? this.getFirmwareRiskForFilter(asset.c8y_Firmware.version) : 'Not available';
+    deviceData.c8y_FirmwareName = (asset.c8y_Firmware && asset.c8y_Firmware.name) ? asset.c8y_Firmware.name : 'Not available';
+    deviceData.c8y_FirmwareVersionIssues = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssues) ? asset.c8y_Firmware.versionIssues : 'Not available';
+    deviceData.c8y_FirmwareVersionIssuesName = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssuesName) ? asset.c8y_Firmware.versionIssuesName : 'Not available';
+    deviceData.c8y_AvailabilityStatus = availability;
 
-        if (element === 'other' && this.getTheValue(asset, this.otherProp.value) !== undefined) {
-          deviceData.other = this.getTheValue(asset, this.otherProp.value);
-          deviceData.other = JSON.stringify(deviceData.other);
-        }
-      });
+    deviceData.alertDetails = alertDesc;
+    if ((this.config.p1Props === 'Other' || this.config.p2Props  === 'Other') && this.getTheValue(asset, this.otherProp.value) !== undefined) {
+      deviceData.other = this.getTheValue(asset, this.otherProp.value);
+      deviceData.other = JSON.stringify(deviceData.other);
     }
+
+    if ((this.config.p1Props === 'other' || this.config.p2Props === 'other') && this.getTheValue(asset, this.otherProp.value) !== undefined) {
+      deviceData.other = this.getTheValue(asset, this.otherProp.value);
+      deviceData.other = JSON.stringify(deviceData.other);
+    }
+
     this.dynamicDisplayColumns.forEach(element => {
       deviceData[element.value] = this.getTheValue(asset, element.value);
       deviceData[element.value] = JSON.stringify(this.getTheValue(asset, element.value));
