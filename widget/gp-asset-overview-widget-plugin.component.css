@@ -54,10 +54,10 @@ li>span:hover {
 
 .asset-name {
     margin-left: 10px;
-    font-size: 14px;
+/*     font-size: 14px;
     color: rgb(1, 31, 61);
     font-family: Roboto, Helvetica, Arial, sans-serif;
-    margin-top: 12px;
+    margin-top: 12px; */
 }
 
 .asset-c8y-tree-view-node {
@@ -72,24 +72,49 @@ li>span:hover {
     border-right: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
     border-top: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
     content: "";
-    height: 64px;
+    height: 34px;
     position: absolute;
-    transform: translate(-40px, -40px);
-    width: 40px;
+    transform: translate(-20px, -20px);
+    width: 20px;
+}
+.expanded.asset-c8y-tree-view-node:after {
+    border-width: 1px;
+    border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-right: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-top: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    content: "";
+    height: 35px;
+    position: absolute;
+    transform: translate(-20px, -55px);
+    width: 1px;
 }
 
-.asset-viewer-root:before {
+.asset-overview-root:before {
     border-bottom: none !important;
     border-left: none !important;
+}
+
+.asset-overview-root:after {
+    border-bottom: none !important;
+    border-left: none !important;
+}
+.asset-overview-root  ul {
+    padding-inline-start: 20px;
+}
+
+.asset-overview-tree-card:first-child {
+    margin-left: -30px;
 }
 
 .c8y-tree-view-node__block {
     /*box-shadow: inset -1px 0 0 0 var(--c8y-component-border-color,var(--c8y-root-component-border-color));
     display: flex;*/
     margin-bottom: var(--c8y-unit-base);
-    min-height: calc(var(--c8y-unit-base)*6);
+  /*   min-height: calc(var(--c8y-unit-base)*6); */
     border: 1px solid #ccc6;
     border-radius: 0px;
+    padding-left: 5px;
 }
 
 li.expanded:last-child>.asset-c8y-tree-view-node:before {
@@ -113,7 +138,7 @@ li.expanded:last-child>.asset-c8y-tree-view-node:before {
 
 .collapse-expand-icon {
     float: right;
-    margin-top: 12px;
+    margin-top: 5px;
     cursor: pointer;
     margin-right: 5px;
 }

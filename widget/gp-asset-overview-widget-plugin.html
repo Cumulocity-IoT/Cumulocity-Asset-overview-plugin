@@ -1,13 +1,13 @@
 <div class="card">
   <div class="card-group">
     <div class="col-md-4">
-      <div class="card" *ngIf="!isBusy">
+      <div class="card asset-overview-tree-card" *ngIf="!isBusy">
         <ng-container *ngTemplateOutlet="treeViewList; context:{$implicit:dataSource, role:'tree'}">
         </ng-container>
         <ng-template #treeViewList let-list>
           <ul [attr.role]="role">
             <li *ngFor="let asset of list;let i=index" [class.active]="selectedAsset===asset.id"
-              [ngClass]="{'expanded' : !asset.visible}" [attr.aria-expanded]="!asset.visible"
+            [ngClass]="{'expanded' : true, 'asset-overview-root' : asset.isRoot}" [attr.aria-expanded]="!asset.visible"
               class="asset-c8y-tree-view-node" style="padding-left: calc(var(--indent)*16px);">
               <div class="c8y-tree-view-node__block" (click)="expandAsset(asset);loadAssetData(asset)">
                 <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-device" *ngIf="asset.c8y_IsDevice"></i>

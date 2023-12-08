@@ -108,7 +108,8 @@ increaseLevel() {
           id: this.config.device.id,
           name: this.config.device.name,
           children: this.config.childDevices,
-          visible: true
+          visible: true,
+          isRoot: true
         }];
         //Expand First Level
         this.expandAsset(this.dataSource[0]);
@@ -118,6 +119,7 @@ increaseLevel() {
         this.dataSource.id = this.config.device.id;
         this.dataSource.children = this.config.childDevices;
         this.dataSource.visible = true;
+        this.dataSource.isRoot = true;
         //Expand First Level
         this.expandAsset(this.dataSource);
         this.loadAssetData(this.dataSource);
