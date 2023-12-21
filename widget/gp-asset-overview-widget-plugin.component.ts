@@ -5,6 +5,7 @@ import { IManagedObject, InventoryService } from '@c8y/client';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as ImageData from './gp-default-image';
 import { Router } from '@angular/router';
+import { assetTreeNodeService } from './gp-asset-tree.service';
 
 export interface Node {
   id: number;
@@ -59,29 +60,23 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   otherProp: any;
   matData: any = [];
   selectedAsset: any;
-  //depth = '0';
-  private _transformer = (node: Node, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      level: level,
-    };
-  };
-// In your component class
-// Initialize a variable to track the level
-level: number = 0;
 
-// Function to increase the level when rendering nested levels
-increaseLevel() {
-  this.level++;
-}
-
-  objectKeys = Object.keys;
   dataSource: any;
+  rootNode: any;
   dynamicDisplayColumns = [];
   displayedColumnsForList: string[] = [];
   markerIcon = '';
+  childDevicesAssets = {};
+  objectKeys = Object.keys;
+
+  currentPage = 1;
+  pageSize = 2;
+  totalRecord = -1;
+  isMorePages = true;
+
   constructor(
-    private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService, private sanitizer: DomSanitizer, private router: Router) {
+    private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService, 
+    private sanitizer: DomSanitizer, private router: Router, private assetTreeNodeService: assetTreeNodeService) {
   }
   async ngOnInit() {
 
@@ -92,22 +87,23 @@ increaseLevel() {
     else {
       this.configDevice = this.config.device.id;
       let inventory = await this.inventoryService.detail(this.configDevice);
-      if (inventory.data.hasOwnProperty('c8y_IsDevice')) {
+      /* if (inventory.data.hasOwnProperty('c8y_IsDevice')) {
         this.dataSource = [];
         this.dataSource.push(inventory.data);
-      }
-      if (this.appId) {
-        this.isBusy = true;
-        await this.getAllDevices(this.configDevice);
-      } else {
-        this.isBusy = true;
-        await this.getAllDevices(this.configDevice);
-      }
-      if (!inventory.data.hasOwnProperty('c8y_IsDevice')) {
+      } */
+      this.dataSource = [];
+      this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true,true);
+      this.dataSource = [this.rootNode];
+      this.isBusy = true;
+      await this.getAllDevices(this.rootNode,this.configDevice);
+    //  this.expandAsset(this.dataSource[0]);
+      this.loadAssetData(this.dataSource[0]);
+      
+      /* if (!inventory.data.hasOwnProperty('c8y_IsDevice')) {
         this.dataSource = [{
           id: this.config.device.id,
           name: this.config.device.name,
-          children: this.config.childDevices,
+          children: this.childDevicesAssets,
           visible: true,
           isRoot: true
         }];
@@ -117,15 +113,15 @@ increaseLevel() {
         this.selectedAsset = this.dataSource[0].id;
       } else {
         this.dataSource.id = this.config.device.id;
-        this.dataSource.children = this.config.childDevices;
+        this.dataSource.children =  this.childDevicesAssets;
         this.dataSource.visible = true;
         this.dataSource.isRoot = true;
         //Expand First Level
         this.expandAsset(this.dataSource);
         this.loadAssetData(this.dataSource);
         this.selectedAsset = this.dataSource.id;
-      }
-    }
+      }*/
+    } 
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
     }
@@ -188,21 +184,61 @@ increaseLevel() {
   /**
      * Get All devices's device type
      */
-  async getAllDevices(deviceId: string) {
-    const deviceList: any = null;
-    await this.deviceList.getChildDevices(deviceId, 1, deviceList)
-      .then(async (deviceFound) => {
-        this.config.childDevices = {};
-        this.config.childDevices = await this.convertToTree(deviceFound.data);
-        this.isBusy = false;
-      })
+  async getAllDevices(rootNode: any, deviceId: string) {
+  //  let assetList: any = null;
+  //  let deviceList: any = null;
+    let allDevices: any = null;
+   // assetList = await this.deviceList.getChildAssets(deviceId, 1, assetList);
+   // deviceList = await this.deviceList.getChildDevices(deviceId, 1, deviceList);
+    
+   // allDevices = (deviceList.data ? allDevices.concat(deviceList.data): allDevices);
+    const assetResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Assets');
+    allDevices  = (assetResponse.data ? assetResponse.data : []);
+    if (assetResponse.data && assetResponse.data.length > 0&& assetResponse.data.length < this.pageSize) {
+      this.totalRecord = (this.pageSize * (assetResponse.paging.totalPages - 1)) + assetResponse.data.length;
+    } else {
+      this.totalRecord = this.pageSize * assetResponse.paging.totalPages;
+    }
+
+    const deviceResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Devices');
+    allDevices  = (deviceResponse.data ? allDevices.concat(deviceResponse.data): allDevices);
+    if (deviceResponse.data && deviceResponse.data.length > 0 &&  deviceResponse.data.length < this.pageSize) {
+      this.totalRecord = this.totalRecord + (this.pageSize * (deviceResponse.paging.totalPages - 1)) + deviceResponse.data.length;
+    } else {
+      this.totalRecord = this.totalRecord +  this.pageSize * deviceResponse.paging.totalPages;
+    }
+    if(this.totalRecord < (this.currentPage * this.pageSize)) { this.isMorePages = false;}
+    if(allDevices) {
+      for (const asset of allDevices) {
+        this.rootNode = this.assetTreeNodeService.insertChildNode(rootNode,asset)
+        if (asset.childAssets.references.length > 0) {
+          console.log("asset.childAssets.references", asset.childAssets.references);
+          
+        }
+        if (asset.childDevices.references.length > 0) {
+          console.log("asset.childDevices.references", asset.childDevices.references);
+        }
+      }
+    } else  {
+      this.totalRecord = -1;
+    }
+    this.dataSource = [];
+    this.dataSource = [this.rootNode];
+    console.log("data source", this.dataSource);
+    this.loadAssetData(rootNode);
+    this.isBusy = false;
+    //  .then(async (deviceFound) => {
+        /*  this.childDevicesAssets = {};
+         this.childDevicesAssets = await this.convertToTree(deviceFound.data); */
+        
+    /*   })
       .catch((err) => {
         if (isDevMode()) { console.log('+-+- ERROR while getting ALL devices ', err); }
-      });
+      }); */
   }
 
 
-  async convertToTree(assets: any): Promise<Node[]> {
+ /*  async convertToTree(assets: any): Promise<Node[]> {
     const map = new Map<number, Node>();
     const roots: Node[] = [];
 
@@ -238,16 +274,28 @@ increaseLevel() {
     }
 
     return roots;
-  }
+  } */
+
+   
   async getDeviceDetails(managedObjectId) {
     let deviceFound = await this.inventoryService.detail(managedObjectId);
     return deviceFound.data;
   }
-  expandAsset(devices) {
-    this.selectedAsset = devices.id;
+  async expandAsset(devices) {
+    this.selectedAsset = devices?.deviceMO?.id;
+    this.totalRecord = -1;
+    this.currentPage = 1;
+    this.isMorePages = true;
+    const children = devices?.children;
+    if(devices.hasChild && (!children || children.length == 0) ) {
+      devices.isLoading = true;
+      await this.getAllDevices(devices,this.selectedAsset);
+      devices.isLoading = false;
+    }
     if (devices.children && devices.children.length > 0) {
       devices.visible = !devices.visible;
     }
+    
   }
 
   async loadAssetImage(image): Promise<SafeResourceUrl> {
@@ -268,9 +316,9 @@ increaseLevel() {
 
 
   async loadAssetData(asset: any) {
-    this.selectedAsset = asset.id;
+    this.selectedAsset = asset?.deviceMO?.id;
     this.matData = [];
-    let deviceData = await this.mapAssetData(asset);
+    let deviceData = await this.mapAssetData(asset.deviceMO);
     this.matData.push(deviceData);
     if (asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
@@ -279,6 +327,21 @@ increaseLevel() {
     console.log("mat",this.matData);
   }
 
+   /**
+   * This method will called during page navigation
+   */
+   async getPageEvent(devices) {
+    this.currentPage = this.currentPage + 1;
+    devices.isLoading = true;
+    await this.getAllDevices(devices,this.selectedAsset);
+    devices.isLoading = false;
+   /*  this.clearSubscriptions();
+    this.matData = [];
+    this.deviceListData = [];
+    this.filterData = [];
+    this.dataSource.data = this.matData;
+    this.getDevices(); */
+  }
   async mapAssetData(asset) {
     let deviceData: DeviceData = {};
     let alertDesc = {
@@ -332,7 +395,7 @@ increaseLevel() {
 
   loadChildAssets(childAssets) {
     childAssets.forEach(async (data) => {
-      let deviceData = await this.mapAssetData(data);
+      let deviceData = await this.mapAssetData(data?.deviceMO);
       this.matData.push(deviceData);
     })
   }

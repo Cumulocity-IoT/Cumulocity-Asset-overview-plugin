@@ -220,7 +220,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
    */
   private getAllDevices(deviceId: string) {
     const deviceList: any = null;
-    this.deviceList.getChildDevices(deviceId, 1, deviceList)
+    this.deviceList.getChildAssets(deviceId, 1, deviceList)
       .then((deviceFound) => {
         this.deviceTypes = Array.from(new Set(deviceFound.data.map(item => item.type)));
         this.deviceTypes = this.deviceTypes.filter(n => n);

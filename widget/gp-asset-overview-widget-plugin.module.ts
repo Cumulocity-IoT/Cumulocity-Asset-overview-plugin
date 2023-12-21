@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconSelectorComponent } from '../widget/icon-selector/icon-selector.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
   declarations: [GPAssetOverviewWidgetPluginComponent, GPAssetOverviewWidgetPluginConfig, IconSelectorComponent],
@@ -19,7 +20,8 @@ import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.
     FormsModule,
     CoreModule,
     NgSelectModule,
-    MatTableModule
+    MatTableModule,
+    PaginationModule.forRoot()
   ],
   exports: [IconSelectorComponent, GpAssetOverviewWidgetService],
   providers: [

@@ -43,7 +43,8 @@ li>span:hover {
 
 .iconClass {
     position: relative;
-    top: -5px;
+    top: -3px;
+    cursor: pointer;
 }
 
 .assetCard {
@@ -54,6 +55,7 @@ li>span:hover {
 
 .asset-name {
     margin-left: 10px;
+    cursor: pointer;
 /*     font-size: 14px;
     color: rgb(1, 31, 61);
     font-family: Roboto, Helvetica, Arial, sans-serif;
@@ -65,7 +67,7 @@ li>span:hover {
     display: block;
 }
 
-.expanded.asset-c8y-tree-view-node:before {
+/* .expanded.asset-c8y-tree-view-node:before {
     border-width: 1px;
     border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
     border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
@@ -76,8 +78,8 @@ li>span:hover {
     position: absolute;
     transform: translate(-20px, -20px);
     width: 20px;
-}
-.expanded.asset-c8y-tree-view-node:after {
+} */
+/* .expanded.asset-c8y-tree-view-node:after {
     border-width: 1px;
     border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
     border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
@@ -89,7 +91,7 @@ li>span:hover {
     transform: translate(-20px, -55px);
     width: 1px;
 }
-
+ */
 .asset-overview-root:before {
     border-bottom: none !important;
     border-left: none !important;
@@ -116,7 +118,7 @@ li>span:hover {
     border-radius: 0px;
     padding-left: 5px;
 }
-
+/* 
 li.expanded:last-child>.asset-c8y-tree-view-node:before {
     border-left-color: transparent !important;
 }
@@ -126,13 +128,12 @@ li.expanded:last-child>.asset-c8y-tree-view-node:before {
     grid-template-rows: repeat(5, min-content);
     grid-auto-flow: column;
 }
-
-.list-group-content {}
+ */
 
 .c8y-tree-view-node__block:hover {
     /* Add your desired hover effect styles here */
     background-color: rgb(173, 233, 235);
-    cursor: pointer;
+  
     /* Add any other styles you want on hover */
 }
 
@@ -141,6 +142,7 @@ li.expanded:last-child>.asset-c8y-tree-view-node:before {
     margin-top: 5px;
     cursor: pointer;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .text-truncate {
@@ -192,3 +194,46 @@ td {
 .active>div {
     background-color: rgb(173, 233, 235);
 }
+
+
+ul {
+    margin: 0;
+    padding-left: 25px;
+  }
+  ul li {
+    position: relative;
+  }
+  ul li:before {
+    position: absolute;
+    top: -8px;
+    left: -15px;
+    display: block;
+    width: 15px;
+    height: 20px;
+    content: "";
+    border-bottom:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-left:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+  }
+  /* hide the vertical line on the first item */
+  ul.asset-c8y-tree-view-node > li:first-child:before {
+    border-left: none;
+  }
+  ul li:after {
+    position: absolute;
+    top: 10px;
+    bottom: -10px;
+    left: -15px;
+    display: block;
+    content: "";
+    border-left:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+  }
+  
+  /* hide the lines on the last item */
+  ul li:last-child:after {
+    display: none;
+  }
+
+  .asset-overview-pager {
+    padding: 5px;
+    cursor: pointer;
+  }
