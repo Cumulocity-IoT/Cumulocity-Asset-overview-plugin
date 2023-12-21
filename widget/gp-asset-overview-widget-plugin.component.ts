@@ -6,7 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as ImageData from './gp-default-image';
 import { Router } from '@angular/router';
 import { assetTreeNodeService } from './gp-asset-tree.service';
-
+import * as _ from 'lodash';
 export interface Node {
   id: number;
   visible: boolean;
@@ -87,40 +87,12 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     else {
       this.configDevice = this.config.device.id;
       let inventory = await this.inventoryService.detail(this.configDevice);
-      /* if (inventory.data.hasOwnProperty('c8y_IsDevice')) {
-        this.dataSource = [];
-        this.dataSource.push(inventory.data);
-      } */
       this.dataSource = [];
       this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true,true);
       this.dataSource = [this.rootNode];
       this.isBusy = true;
       await this.getAllDevices(this.rootNode,this.configDevice);
-    //  this.expandAsset(this.dataSource[0]);
       this.loadAssetData(this.dataSource[0]);
-      
-      /* if (!inventory.data.hasOwnProperty('c8y_IsDevice')) {
-        this.dataSource = [{
-          id: this.config.device.id,
-          name: this.config.device.name,
-          children: this.childDevicesAssets,
-          visible: true,
-          isRoot: true
-        }];
-        //Expand First Level
-        this.expandAsset(this.dataSource[0]);
-        this.loadAssetData(this.dataSource[0]);
-        this.selectedAsset = this.dataSource[0].id;
-      } else {
-        this.dataSource.id = this.config.device.id;
-        this.dataSource.children =  this.childDevicesAssets;
-        this.dataSource.visible = true;
-        this.dataSource.isRoot = true;
-        //Expand First Level
-        this.expandAsset(this.dataSource);
-        this.loadAssetData(this.dataSource);
-        this.selectedAsset = this.dataSource.id;
-      }*/
     } 
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
@@ -185,13 +157,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
      * Get All devices's device type
      */
   async getAllDevices(rootNode: any, deviceId: string) {
-  //  let assetList: any = null;
-  //  let deviceList: any = null;
     let allDevices: any = null;
-   // assetList = await this.deviceList.getChildAssets(deviceId, 1, assetList);
-   // deviceList = await this.deviceList.getChildDevices(deviceId, 1, deviceList);
-    
-   // allDevices = (deviceList.data ? allDevices.concat(deviceList.data): allDevices);
     const assetResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Assets');
     allDevices  = (assetResponse.data ? assetResponse.data : []);
     if (assetResponse.data && assetResponse.data.length > 0&& assetResponse.data.length < this.pageSize) {
@@ -227,56 +193,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     console.log("data source", this.dataSource);
     this.loadAssetData(rootNode);
     this.isBusy = false;
-    //  .then(async (deviceFound) => {
-        /*  this.childDevicesAssets = {};
-         this.childDevicesAssets = await this.convertToTree(deviceFound.data); */
-        
-    /*   })
-      .catch((err) => {
-        if (isDevMode()) { console.log('+-+- ERROR while getting ALL devices ', err); }
-      }); */
   }
 
-
- /*  async convertToTree(assets: any): Promise<Node[]> {
-    const map = new Map<number, Node>();
-    const roots: Node[] = [];
-
-    for (const asset of assets) {
-      map.set(asset.id, { ...asset, children: [] });
-    }
-
-    for (const asset of assets) {
-      const parent = map.get(asset.id);
-      if (asset.childAssets.references.length > 0) {
-        for (const child of asset.childAssets.references) {
-          let childNode: any = await this.getDeviceDetails(child.managedObject.id);
-          //const childNode = map.get(child.managedObject.id);
-          if (childNode) {
-            parent?.children.push(childNode);
-            parent.visible = true;
-          }
-        }
-      }
-      if (asset.childDevices.references.length > 0) {
-        for (const child of asset.childDevices.references) {
-          let childNode: any = await this.getDeviceDetails(child.managedObject.id);
-          //const childNode = map.get(child.managedObject.id);
-          if (childNode) {
-            parent?.children.push(childNode);
-            parent.visible = true;
-          }
-        }
-      }
-      if (parent) {
-        roots.push(map.get(asset.id)!);
-      }
-    }
-
-    return roots;
-  } */
-
-   
   async getDeviceDetails(managedObjectId) {
     let deviceFound = await this.inventoryService.detail(managedObjectId);
     return deviceFound.data;
@@ -324,7 +242,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       await this.loadChildAssets(asset.children);
      
     }
-    console.log("mat",this.matData);
   }
 
    /**
@@ -335,13 +252,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     devices.isLoading = true;
     await this.getAllDevices(devices,this.selectedAsset);
     devices.isLoading = false;
-   /*  this.clearSubscriptions();
-    this.matData = [];
-    this.deviceListData = [];
-    this.filterData = [];
-    this.dataSource.data = this.matData;
-    this.getDevices(); */
   }
+
   async mapAssetData(asset) {
     let deviceData: DeviceData = {};
     let alertDesc = {
@@ -355,25 +267,37 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     deviceData.type = asset.type;
     deviceData.lastUpdated = asset.lastUpdated;
     deviceData.creationTime = asset.creationTime;
-    deviceData.externalId = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalId : 'Not Available';
-    deviceData.externalType = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalType : 'Not Available';
-    deviceData.owner = asset.owner ? asset.owner : 'Not available';
-    deviceData.c8y_ConnectionStatus = asset.c8y_Connection ? asset.c8y_Connection.status : 'Not Available';
-    let availability = asset.c8y_Availability ? asset.c8y_Availability.status : 'Not Available';
+    deviceData.externalId = _.get(asset, "asset.deviceExternalDetails.externalId", 'Not Available');
+    deviceData.externalType = _.get(asset, "asset.deviceExternalDetails.externalType", 'Not Available');
+    deviceData.owner = _.get(asset, "asset.owner", 'Not Available');
+    deviceData.c8y_ConnectionStatus = _.get(asset, "asset.c8y_Connection.status", 'Not Available');
+    deviceData.c8y_AvailabilityStatus = _.get(asset, "asset.c8y_Availability.status", 'Not Available');
+    deviceData.c8y_RequiredAvailabilityResponseInterval = _.get(asset, "asset.c8y_RequiredAvailability.responseInterval", 'Not Available');
+    deviceData.c8y_Notes = _.get(asset, "asset.c8y_Notes", 'Not Available');
+    deviceData.c8y_CommunicationMode = _.get(asset, "asset.c8y_CommunicationMode.mode", 'Not Available');
+    deviceData.c8y_HardwareModel = _.get(asset, "asset.c8y_Hardware.model", 'Not Available');
+    deviceData.c8y_FirmwareName = _.get(asset, "asset.c8y_Firmware.name", 'Not Available');
+    deviceData.c8y_FirmwareVersionIssues = _.get(asset, "asset.c8y_Firmware.versionIssues", 'Not Available');
+    deviceData.c8y_FirmwareVersionIssuesName = _.get(asset, "asset.c8y_Firmware.versionIssuesName", 'Not Available');
+//    deviceData.externalId = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalId : 'Not Available';
+//    deviceData.externalType = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalType : 'Not Available';
+//    deviceData.owner = asset.owner ? asset.owner : 'Not available';
+//    deviceData.c8y_ConnectionStatus = asset.c8y_Connection ? asset.c8y_Connection.status : 'Not Available';
+//    let availability = asset.c8y_Availability ? asset.c8y_Availability.status : 'Not Available';
     alertDesc = (asset.hasOwnProperty('c8y_IsAsset')) ? await this.deviceList.getAlarmsForAsset(asset) : this.checkAlarm(asset, alertDesc);
     deviceData.assetImage = '';
-    deviceData.c8y_RequiredAvailabilityResponseInterval = asset.c8y_RequiredAvailability ? asset.c8y_RequiredAvailability.responseInterval : 'Not Available';
-    deviceData.c8y_Notes = asset.c8y_Notes ? asset.c8y_Notes : 'Not Available';
-    deviceData.c8y_CommunicationMode = asset.c8y_CommunicationMode ? asset.c8y_CommunicationMode.mode : 'Not Available';
-    deviceData.c8y_HardwareModel = asset.c8y_Hardware ? asset.c8y_Hardware.model : 'Not Available';
+//    deviceData.c8y_RequiredAvailabilityResponseInterval = asset.c8y_RequiredAvailability ? asset.c8y_RequiredAvailability.responseInterval : 'Not Available';
+//    deviceData.c8y_Notes = asset.c8y_Notes ? asset.c8y_Notes : 'Not Available';
+//    deviceData.c8y_CommunicationMode = asset.c8y_CommunicationMode ? asset.c8y_CommunicationMode.mode : 'Not Available';
+//    deviceData.c8y_HardwareModel = asset.c8y_Hardware ? asset.c8y_Hardware.model : 'Not Available';
     if (asset.image) {
       deviceData.assetImage = await this.loadAssetImage(asset.image);
     }
     deviceData.c8y_FirmwareVersion = (asset.c8y_Firmware && asset.c8y_Firmware.version) ? this.getFirmwareRiskForFilter(asset.c8y_Firmware.version) : 'Not available';
-    deviceData.c8y_FirmwareName = (asset.c8y_Firmware && asset.c8y_Firmware.name) ? asset.c8y_Firmware.name : 'Not available';
-    deviceData.c8y_FirmwareVersionIssues = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssues) ? asset.c8y_Firmware.versionIssues : 'Not available';
-    deviceData.c8y_FirmwareVersionIssuesName = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssuesName) ? asset.c8y_Firmware.versionIssuesName : 'Not available';
-    deviceData.c8y_AvailabilityStatus = availability;
+//    deviceData.c8y_FirmwareName = (asset.c8y_Firmware && asset.c8y_Firmware.name) ? asset.c8y_Firmware.name : 'Not available';
+//    deviceData.c8y_FirmwareVersionIssues = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssues) ? asset.c8y_Firmware.versionIssues : 'Not available';
+ //   deviceData.c8y_FirmwareVersionIssuesName = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssuesName) ? asset.c8y_Firmware.versionIssuesName : 'Not available';
+ //   deviceData.c8y_AvailabilityStatus = availability;
 
     deviceData.alertDetails = alertDesc;
     if ((this.config.p1Props === 'Other' || this.config.p2Props  === 'Other') && this.getTheValue(asset, this.otherProp.value) !== undefined) {

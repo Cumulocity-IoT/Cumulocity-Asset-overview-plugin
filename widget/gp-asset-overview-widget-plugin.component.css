@@ -67,31 +67,6 @@ li>span:hover {
     display: block;
 }
 
-/* .expanded.asset-c8y-tree-view-node:before {
-    border-width: 1px;
-    border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-right: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-top: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    content: "";
-    height: 34px;
-    position: absolute;
-    transform: translate(-20px, -20px);
-    width: 20px;
-} */
-/* .expanded.asset-c8y-tree-view-node:after {
-    border-width: 1px;
-    border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-right: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-top: 0 solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    content: "";
-    height: 35px;
-    position: absolute;
-    transform: translate(-20px, -55px);
-    width: 1px;
-}
- */
 .asset-overview-root:before {
     border-bottom: none !important;
     border-left: none !important;
@@ -110,31 +85,14 @@ li>span:hover {
 }
 
 .c8y-tree-view-node__block {
-    /*box-shadow: inset -1px 0 0 0 var(--c8y-component-border-color,var(--c8y-root-component-border-color));
-    display: flex;*/
     margin-bottom: var(--c8y-unit-base);
-  /*   min-height: calc(var(--c8y-unit-base)*6); */
     border: 1px solid #ccc6;
     border-radius: 0px;
     padding-left: 5px;
 }
-/* 
-li.expanded:last-child>.asset-c8y-tree-view-node:before {
-    border-left-color: transparent !important;
-}
-
-.list-group {
-    display: grid;
-    grid-template-rows: repeat(5, min-content);
-    grid-auto-flow: column;
-}
- */
 
 .c8y-tree-view-node__block:hover {
-    /* Add your desired hover effect styles here */
     background-color: rgb(173, 233, 235);
-  
-    /* Add any other styles you want on hover */
 }
 
 .collapse-expand-icon {
@@ -195,7 +153,6 @@ td {
     background-color: rgb(173, 233, 235);
 }
 
-
 ul {
     margin: 0;
     padding-left: 25px;
@@ -236,4 +193,15 @@ ul {
   .asset-overview-pager {
     padding: 5px;
     cursor: pointer;
+  }
+
+  .two-column-table td{
+    padding-left:  3px;
+    padding-right: 3px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 0;
+  }
+  .two-column-table tr{
+    line-height: 10px;
   }
