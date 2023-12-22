@@ -177,13 +177,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     if(allDevices) {
       for (const asset of allDevices) {
         this.rootNode = this.assetTreeNodeService.insertChildNode(rootNode,asset)
-        if (asset.childAssets.references.length > 0) {
-          console.log("asset.childAssets.references", asset.childAssets.references);
-          
-        }
-        if (asset.childDevices.references.length > 0) {
-          console.log("asset.childDevices.references", asset.childDevices.references);
-        }
       }
     } else  {
       this.totalRecord = -1;
