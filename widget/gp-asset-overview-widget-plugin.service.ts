@@ -34,6 +34,7 @@ export class GpAssetOverviewWidgetService {
     const inventoryFilter = {
       // fragmentType: 'c8y_IsDevice',
       pageSize: 50,
+      
       withTotalPages: true,
       query: '',
       currentPage: pageToGet

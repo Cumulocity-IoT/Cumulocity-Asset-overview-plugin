@@ -1,10 +1,10 @@
 {
   "name": "cumulocity-asset-overview-widget",
-  "version": "1018.486.5",
+  "version": "1.0.0",
   "description": "This is the Cumulocity module federation plugin. Plugins can be developed like any Cumulocity application, but can be used at runtime by other applications. Therefore, they export an Angular module which can then be imported by any other application. The exports are defined in `package.json`:",
   "scripts": {
     "start": "c8ycli server -u https://appbuilder.eu-latest.cumulocity.com/",
-    "build": "c8ycli build --env.mode=development",
+    "build": "c8ycli build --env.mode=production",
     "deploy": "c8ycli deploy",
     "postinstall": "ngcc",
     "prebuild": " gulp clean",
@@ -82,7 +82,13 @@
         "widget-plugin": [
           "GpAssetOverviewWidgetPluginModule"
         ]
-      }
+      },
+      "copy": [
+        {
+          "from": "assets/assetoverview.PNG",
+          "to": "assets/assetoverview.PNG"
+        }
+      ]
     },
     "cli": {}
   },

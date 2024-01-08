@@ -1,6 +1,6 @@
 <div class="card">
   <div class="row col-md-12 card-group">
-    <div class="col-md-4 ">
+    <div class="col-md-3">
       <div class="card asset-overview-tree-card" *ngIf="!isBusy">
         <ng-container *ngTemplateOutlet="treeViewList; context:{$implicit:dataSource, role:'tree'}">
         </ng-container>
@@ -45,7 +45,7 @@
 
 
     </div>
-    <div class="col-md-8" *ngIf="!isBusy">
+    <div class="col-md-9" *ngIf="!isBusy">
       <!-- <div class="row" style="background-color: rgb(243, 137, 0);"> -->
       <div *ngFor="let data of matData">
         <ng-container *ngIf="data && data.id !== undefined">
@@ -54,14 +54,14 @@
             <hr style="margin-top: 5px;">
             <div class="">
               <div class="card-group">
-                <div class="card-dashboard">
+                <div class="card-dashboard first">
                   <span *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"><img [src]="data.assetImage"
-                      style="width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></span>
+                      style="width:125px; height:140px;margin-top: 10px;margin-left: 10px;"></span>
                   <span *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i [c8yIcon]="markerIcon"
                       style="font-size:110px;width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
                 </div>
 
-                <table class="two-column-table">
+                <table class="two-column-table second">
                   <tbody>
                     <ng-container *ngFor="let page1 of config.p1Props;">
                       <tr>
@@ -85,7 +85,7 @@
                     </ng-container>
                   </tbody>
                 </table>
-                <table class="two-column-table" style="margin-left:30px;">
+                <table class="two-column-table third">
                   <tbody>
                     <ng-container *ngFor="let page2 of config.p2Props;">
                       <tr>

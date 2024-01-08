@@ -40,7 +40,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   busy: false;
   isExpandedP1 = false;
   isExpandedFP = false;
-  
+  pageSizeList: string[] = ['5', '10', '20', '50', '100'];
   isExpandedP2 = false;
   isExpandedDBS = false;
   props = new FormControl();
@@ -70,20 +70,40 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,private fb: FormBuilder,) { }
 
   async ngOnInit(): Promise<void> {
+    this.appId = this. deviceList.getAppId();
+    // this.appId = '57697';
+    if (!this.config.configDashboard) {
+      this.config.configDashboard = false;
+    }
+    if (!this.config.displayMode) {
+      this.config.displayMode = 'All';
+    }
+    if (!this.config.dashboardList && this.appId) {
+      const dashboardObj: DashboardConfig = {};
+      dashboardObj.type = 'All';
+      this.dashboardList.push(dashboardObj);
+      this.config.dashboardList = this.dashboardList;
+    }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
     }
-    this.getAllDevices(this.config.device.id);
-   
-
+    if (!this.config.device) {
+      this.config.device = {};
+    }
+    else {
+      this.configDevice = this.config.device.id;
+      if (this.appId) {
+        this.getAllDevices(this.configDevice);
+      }
+    }
     if (!this.config.selectedInputs) {
       this.config.selectedInputs = ['id', 'name', 'deviceExternalDetails.externalId', 'lastUpdated', 'c8y_Availability.status', 'c8y_ActiveAlarmsStatus'];
     }
     if (this.config.selectedInputs && this.config.selectedInputs.indexOf('other') !== -1) {
       this.otherPropList = true;
     }
-    //if (!this.config.dashboardList && this.appId) {
-    if (!this.config.dashboardList) {
+    if (!this.config.dashboardList && this.appId) {
+    //if (!this.config.dashboardList) {
       const dashboardObj: DashboardConfig = {};
       dashboardObj.type = 'All';
       this.dashboardList.push(dashboardObj);
@@ -94,23 +114,27 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       { id: 'id', label: 'ID', value: 'id' },
       { id: 'name', label: 'Name', value: 'name' },
       { id: 'owner', label: 'Owner', value: 'owner' },
+      { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
+      { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
+      { id: 'externalId', label: 'External id', value: 'externalId' },
+      { id: 'externalType', label: 'External type', value: 'externalType' },
       //{ id: 'childDeviceAvailable', label: 'Child devices', value: 'childDeviceAvailable' },
       { id: 'c8y_AvailabilityStatus', label: 'Availability status', value: 'c8y_AvailabilityStatus' },
       { id: 'c8y_ConnectionStatus',label: 'Connection status', value: 'c8y_ConnectionStatus' },
       { id: 'c8y_FirmwareName', label: 'Firmware name', value: 'c8y_FirmwareName' },
       { id: 'c8y_FirmwareVersion', label: 'Firmware version', value: 'c8y_FirmwareVersion' },
       { id: 'c8y_FirmwareVersionIssues', label: 'Firmware verison issues', value: 'c8y_FirmwareVersionIssues' },
-      { id: 'c8y_FirmwareVersionIssuesName', label: 'Firmware issue name', value: 'c8y_FirmwareVersionIssuesName' },
+      { id: 'c8y_FirmwareIssuesName', label: '', value: 'c8y_FirmwareVersionIssuesName' },
       {
         id: 'c8y_RequiredAvailabilityResponseInterval'
         , label: 'Required availability', value: 'c8y_RequiredAvailabilityResponseInterval'
       },
-      { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
-      { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
-      { id: 'externalId', label: 'External id', value: 'externalId' },
-      { id: 'externalType', label: 'External type', value: 'externalType' },
+    //  { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
+      //{ id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
+      //{ id: 'externalId', label: 'External id', value: 'externalId' },
+      //{ id: 'externalType', label: 'External type', value: 'externalType' },
       { id: 'c8y_ActiveAlarmsStatus', label: 'Active alarms status', value: 'c8y_ActiveAlarmsStatus' },
-      { id: 'other', label: 'Other', value: 'other' }
+    //  { id: 'other', label: 'Other', value: 'other' }
     ];
     if (!this.config.fpProps) {
       this.config.fpProps = ['Availability', 'ActiveAlarmsStatus'];

@@ -32,10 +32,11 @@ li>span:hover {
 .card {
     padding: 0px 0px 0px 9px;
     box-shadow: none;
+
 }
 
 .assetName {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     display: inline-block;
     margin-top: 5px;
@@ -56,7 +57,7 @@ li>span:hover {
 .asset-name {
     margin-left: 10px;
     cursor: pointer;
-/*     font-size: 14px;
+    /*     font-size: 14px;
     color: rgb(1, 31, 61);
     font-family: Roboto, Helvetica, Arial, sans-serif;
     margin-top: 12px; */
@@ -76,7 +77,8 @@ li>span:hover {
     border-bottom: none !important;
     border-left: none !important;
 }
-.asset-overview-root  ul {
+
+.asset-overview-root ul {
     padding-inline-start: 20px;
 }
 
@@ -156,11 +158,13 @@ td {
 ul {
     margin: 0;
     padding-left: 25px;
-  }
-  ul li {
+}
+
+ul li {
     position: relative;
-  }
-  ul li:before {
+}
+
+ul li:before {
     position: absolute;
     top: -8px;
     left: -15px;
@@ -168,40 +172,72 @@ ul {
     width: 15px;
     height: 20px;
     content: "";
-    border-bottom:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-    border-left:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-  }
-  /* hide the vertical line on the first item */
-  ul.asset-c8y-tree-view-node > li:first-child:before {
+    border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+}
+
+/* hide the vertical line on the first item */
+ul.asset-c8y-tree-view-node>li:first-child:before {
     border-left: none;
-  }
-  ul li:after {
+}
+
+ul li:after {
     position: absolute;
     top: 10px;
     bottom: -10px;
     left: -15px;
     display: block;
     content: "";
-    border-left:  1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
-  }
-  
-  /* hide the lines on the last item */
-  ul li:last-child:after {
-    display: none;
-  }
+    border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
+}
 
-  .asset-overview-pager {
+/* hide the lines on the last item */
+ul li:last-child:after {
+    display: none;
+}
+
+.asset-overview-pager {
     padding: 5px;
     cursor: pointer;
-  }
+}
 
-  .two-column-table td{
-    padding-left:  3px;
-    padding-right: 3px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    line-height: 0;
-  }
-  .two-column-table tr{
+.two-column-table {
+    margin-top: 10px;
+}
+
+.two-column-table td {
+    padding: 3px;
+    line-height: 2;
+}
+
+.two-column-table tr {
     line-height: 10px;
-  }
+}
+
+.two-column-table tbody {
+    display: block;
+}
+
+.first {
+    width: 20%;
+    display: inline-block;
+}
+
+.second {
+    width: 35%;
+    display: inline-block;
+}
+
+.third {
+    width: 30%;
+    display: inline-block;
+}
+
+@media screen and (max-width: 500px) {
+
+    .first,
+    .second,
+    .third {
+        width: 70%;
+    }
+}
