@@ -1,10 +1,7 @@
 <body style="overflow: hidden;">
-<!-- <div *ngIf="isBusy">
-  <c8y-loading></c8y-loading>
-</div> -->
 <div class="row">
   <div class="col-sm-12 " style="margin-bottom: 10px;display:flex; justify-content:end;align-items:end;">
-    <label for="pageSize" class="control-label">Items per page</label>
+    <label class="pageSize" class="control-label">Items per page</label>
     <div>
       <div class="col-sm-1">
         <select style="width: auto;" id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
@@ -16,9 +13,6 @@
           <!-- Add more options as needed -->
         </select>
       </div>
-      <!-- <div class="refresh-panel">
-        <button type="button" class="btn btn-link" (click)="refresh()"><span class="fa fa-refresh"></span></button>
-      </div> -->
       <div class="refresh-panel">
         <button type="button" class="btn btn-clean" (click)="refresh()"><i c8yIcon="refresh"></i></button>
        
@@ -66,7 +60,6 @@
       </div>
     </div>
     <div class="col-md-9" *ngIf="!isBusy">
-      <!-- <div class="row" style="background-color: rgb(243, 137, 0);"> -->
       <div *ngFor="let data of matData">
         <ng-container *ngIf="data && data.id !== undefined">
           <div class="card col-md-12 assetCard">
@@ -132,39 +125,6 @@
           </div>
         </ng-container>
       </div>
-      <!-- <div class="row">
-        <div class="col-sm-6 form-horizontal">
-          <div class="col-sm-12 " style="margin-bottom: 10px;display: flex; justify-content: center;">
-            <label for="pageSize" class=" control-label">Items per page</label>
-            <div class="col-sm-3">
-              <select style="width: auto;" id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="15">20</option>
-                <option value="15">25</option>
-                 Add more options as needed -->
-      <!-- </select>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
 
   </div>
-
-
-
-    <!-- <div class="row">
-    <div class="col-sm-6 form-horizontal">
-      <div class="col-sm-12 " style="margin-bottom: 10px;">
-        <label for="pageSize" class=" col-sm-6 control-label" style="margin-left: -20px;">Page Size:</label>
-        <div class="col-sm-6 ">  
-      <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-         Add more options as needed -->
-    <!-- </select>
-    </div>
-  </div> -->
