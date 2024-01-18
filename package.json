@@ -1,7 +1,7 @@
 {
-  "name": "cumulocity-asset-overview-widget",
+  "name": "Asset-Overview-Plugin",
   "version": "1.0.0",
-  "description": "This is the Cumulocity module federation plugin. Plugins can be developed like any Cumulocity application, but can be used at runtime by other applications. Therefore, they export an Angular module which can then be imported by any other application. The exports are defined in `package.json`:",
+  "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
   "scripts": {
     "start": "c8ycli server -u https://appbuilder.eu-latest.cumulocity.com/",
     "build": "c8ycli build --env.mode=production",
@@ -15,7 +15,7 @@
     "Plugin",
     "Widget"
   ],
-  "author": "",
+  "author": "Sandhya M - Software AG, Global Presales",
   "license": "Apache-2.0",
   "dependencies": {
     "@angular/animations": "15.2.7",
@@ -59,11 +59,11 @@
   },
   "c8y": {
     "application": {
-      "name": "cumulocity-asset-overview-widget",
-      "description": "Custom widget with module federation",
-      "contextPath": "cumulocity-asset-overview-widget",
-      "key": "cumulocity-asset-overview-widget-application-key",
-      "globalTitle": "Custom widget with Module Federation",
+      "name": "Asset Overview Plugin",
+      "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
+      "contextPath": "sag-ps-pkg-asset-overview",
+      "key": "sag-ps-pkg-asset-overview-application-key",
+      "globalTitle": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
       "brandingEntry": "./widget/styles.less",
       "tabsHorizontal": true,
       "isPackage": true,
@@ -75,7 +75,7 @@
           "name": "Asset Overview widget plugin",
           "module": "GpAssetOverviewWidgetPluginModule",
           "path": "./widget/gp-asset-overview-widget-plugin.module.ts",
-          "description": "Adds a custom widget to the shell application"
+          "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards"
         }
       ],
       "remotes": {

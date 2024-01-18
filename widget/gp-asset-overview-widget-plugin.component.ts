@@ -1,3 +1,21 @@
+/**
+ * Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Component, ElementRef, Input, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
 import { Observable, from, Subject, Subscription, BehaviorSubject, combineLatest } from "rxjs";
@@ -37,6 +55,7 @@ export interface DeviceData {
   externalId?: string;
   externalType?: string;
   c8y_ActiveAlarmsStatus?: any;
+  
 }
 
 @Component({
@@ -50,7 +69,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   selectedInputLabels: string[] = []; // Assuming corresponding labels are stored here
   groupedInputs: any[][] = [];
   groupedLabels: string[][] = [];
-
+  allSubscriptions: any = [];
   configDashboardList = [];
   appId = '';
   @Input() config;
@@ -60,7 +79,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   otherProp: any;
   matData: any = [];
   selectedAsset: any;
-
+  pageSizeList: string[] = ['5', '10', '20', '50', '100'];
   dataSource: any;
   rootNode: any;
   dynamicDisplayColumns = [];
@@ -68,11 +87,11 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   markerIcon = '';
   childDevicesAssets = {};
   objectKeys = Object.keys;
-
   currentPage = 1;
   pageSize = 5;
   totalRecord = -1;
   isMorePages = true;
+  
 
   constructor(
     private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService,
@@ -81,9 +100,10 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   async ngOnInit() {
 
     this.appId = await this.deviceList.getAppId();
-    if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
-      this.pageSize = Number(this.config.pageSize);
+   if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
+     this.pageSize = Number(this.config.pageSize);
     }
+   
     if (!this.config.device) {
       this.config.device = {};
     }
@@ -96,7 +116,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.dataSource = [this.rootNode];
       this.isBusy = true;
       await this.getAllDevices(this.rootNode, this.configDevice);
-      // this.loadAssetData(this.dataSource[0]);
+   
     }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
@@ -122,8 +142,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     // Split selectedInputs and selectedInputLabels into groups of five
     this.groupedInputs = this.chunkArray(this.selectedInputs, 5);
     this.groupedLabels = this.chunkArray(this.selectedInputLabels, 5);
-    console.log("Datasource", this.dataSource);
-    console.log("MatData", this.matData);
+   
 
   }
 
@@ -138,9 +157,9 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
 
   // Navigate URL to dashboard if dashboard is exist
   navigateURL(deviceId: string, deviceType: string) {
-    console.log("navigator clicked id:" + deviceId + " type:" + deviceType);
+   
     if (deviceType && this.appId) {
-      // if (deviceType) {
+    
       const dashboardObj = this.configDashboardList.find((dashboard) => dashboard.type === deviceType);
       if (dashboardObj && dashboardObj.templateID) {
         if (dashboardObj.withTabGroup) {
@@ -150,7 +169,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
           this.router.navigate([
             `/application/${this.appId}/tabgroup/${dashboardObj.tabGroupID}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         } else {
-          console.log("App id:", this.appId);
+         
           this.router.navigate([`/application/${this.appId}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         }
       }
@@ -162,24 +181,34 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   /**
      * Get All devices's device type
      */
-  async getAllDevices(rootNode: any, deviceId: string) {
+  async getAllDevices(rootNode: any, deviceId: string, fromPagination?) {
+
+    
     let allDevices: any = null;
     const assetResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Assets');
     allDevices = (assetResponse.data ? assetResponse.data : []);
+    
     if (assetResponse.data && assetResponse.data.length > 0 && assetResponse.data.length < this.pageSize) {
       this.totalRecord = (this.pageSize * (assetResponse.paging.totalPages - 1)) + assetResponse.data.length;
+     
     } else {
+     
       this.totalRecord = this.pageSize * assetResponse.paging.totalPages;
     }
 
     const deviceResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Devices');
     allDevices = (deviceResponse.data ? allDevices.concat(deviceResponse.data) : allDevices);
+   
     if (deviceResponse.data && deviceResponse.data.length > 0 && deviceResponse.data.length < this.pageSize) {
+    
       this.totalRecord = this.totalRecord + (this.pageSize * (deviceResponse.paging.totalPages - 1)) + deviceResponse.data.length;
     } else {
+     
       this.totalRecord = this.totalRecord + this.pageSize * deviceResponse.paging.totalPages;
     }
-    if (this.totalRecord < (this.currentPage * this.pageSize)) { this.isMorePages = false; }
+    if ((this.totalRecord < (this.currentPage * this.pageSize)) ) { this.isMorePages = false; }
+    if (this.pageSize <= 5) { this.isMorePages = true }
+   
     if (allDevices) {
       for (const asset of allDevices) {
         this.rootNode = this.assetTreeNodeService.insertChildNode(rootNode, asset)
@@ -188,10 +217,11 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.totalRecord = -1;
     }
     this.dataSource = [];
+    
     this.dataSource = [this.rootNode];
-    console.log("data source", this.dataSource);
+   
     this.loadAssetData(rootNode);
-    console.log("MatData", this.matData);
+   
     this.isBusy = false;
   }
 
@@ -200,6 +230,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     return deviceFound.data;
   }
   async expandAsset(devices) {
+    
     this.selectedAsset = devices?.deviceMO?.id;
     this.totalRecord = -1;
     this.currentPage = 1;
@@ -237,7 +268,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     this.selectedAsset = asset?.deviceMO?.id;
     this.matData = [];
     let deviceData = await this.mapAssetData(asset.deviceMO);
-    console.log("newcheck",this.matData)
+    
     this.matData.push(deviceData);
     if (asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
@@ -268,29 +299,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     deviceData.type = asset.type;
     deviceData.lastUpdated = asset.lastUpdated;
     deviceData.creationTime = asset.creationTime;
-    //deviceData.externalId = _.get(asset, "asset.deviceExternalDetails.externalId", 'Not Available');
-    //deviceData.externalId = asset.deviceExternalDetails.externalId;
-    //deviceData.externalType = asset.deviceExternalDetails.externalType;
-    //  deviceData.externalType = _.get(asset, "asset.deviceExternalDetails.externalType", 'Not Available');
-    //deviceData.owner = _.get(asset, "asset.owner", 'Not Available');
-    // deviceData.owner = asset.owner;
-    //deviceData.c8y_ConnectionStatus = _.get(asset, "asset.c8y_Connection.status", 'Not Available');
-    //deviceData.c8y_ConnectionStatus =asset.c8y_Connection.status;
-    // deviceData.c8y_AvailabilityStatus = _.get(asset, "asset.c8y_Availability.status", 'Not Available');
-    // deviceData.c8y_AvailabilityStatus = asset.c8y_Availability.status;
-
-    //deviceData.c8y_RequiredAvailabilityResponseInterval = _.get(asset, "asset.c8y_RequiredAvailability.responseInterval", 'Not Available');
-    // deviceData.c8y_RequiredAvailabilityResponseInterval =asset.c8y_RequiredAvailability.responseInterval;
-
-
-    //deviceData.c8y_Notes = _.get(asset, "asset.c8y_Notes", 'Not Available');
-    //deviceData.c8y_Notes =asset.c8y_Notes;
-
-    //deviceData.c8y_CommunicationMode = _.get(asset, "asset.c8y_CommunicationMode.mode", 'Not Available');
-    //deviceData.c8y_HardwareModel = _.get(asset, "asset.c8y_Hardware.model", 'Not Available');
-    //deviceData.c8y_FirmwareName = _.get(asset, "asset.c8y_Firmware.name", 'Not Available');
-    //deviceData.c8y_FirmwareVersionIssues = _.get(asset, "asset.c8y_Firmware.versionIssues", 'Not Available');
-    //deviceData.c8y_FirmwareVersionIssuesName = _.get(asset, "asset.c8y_Firmware.versionIssuesName", 'Not Available');
     deviceData.externalId = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalId : 'Not Available';
     deviceData.externalType = asset.deviceExternalDetails ? asset.deviceExternalDetails.externalType : 'Not Available';
     deviceData.owner = asset.owner ? asset.owner : 'Not available';
@@ -333,7 +341,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     
     childAssets.forEach(async (data) => {
       let deviceData = await this.mapAssetData(data?.deviceMO);
-      console.log("checkmat",this.matData)
     this.matData.push(deviceData);
     })
   }
@@ -505,4 +512,52 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     }
     return alertDesc;
   }
+  async refresh() {
+    this.isBusy = true;
+    this.clearSubscriptions();
+    this.matData = [];
+    this.dataSource = [];
+    let inventory = await this.inventoryService.detail(this.configDevice);
+    this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
+     this.dataSource = [this.rootNode];
+    
+ 
+  this.matData=true;
+    this.getAllDevices(this.rootNode, this.configDevice);
+    
+   this.isBusy = false;
+   
+  }
+  /**
+   * Clear all Realtime subscriptions
+   */
+  private clearSubscriptions() {
+    if (this.allSubscriptions) {
+      this.allSubscriptions.forEach((s) => {
+     
+      });
+    }
+  }
+  
+
+async onPageSizeChange()
+{
+ 
+  this.dataSource = [];
+  this.matData = [];
+  
+ this.isBusy = true;
+  this.assetTreeNodeService.resetTree();
+ let inventory = await this.inventoryService.detail(this.configDevice);
+  this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
+   this.dataSource = [this.rootNode];
+
+this.matData=true;
+  this.getAllDevices(this.rootNode, this.configDevice);
+  this.isBusy = false;
+  
+ 
+  
+}
+
 }

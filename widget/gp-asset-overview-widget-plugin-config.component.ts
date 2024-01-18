@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { Component, Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SELECTION_MODEL_FACTORY } from '@ng-select/ng-select';
@@ -71,7 +88,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.appId = this. deviceList.getAppId();
-    // this.appId = '57697';
+    
     if (!this.config.configDashboard) {
       this.config.configDashboard = false;
     }
@@ -103,7 +120,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       this.otherPropList = true;
     }
     if (!this.config.dashboardList && this.appId) {
-    //if (!this.config.dashboardList) {
+   
       const dashboardObj: DashboardConfig = {};
       dashboardObj.type = 'All';
       this.dashboardList.push(dashboardObj);
@@ -118,7 +135,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
       { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
       { id: 'externalId', label: 'External id', value: 'externalId' },
       { id: 'externalType', label: 'External type', value: 'externalType' },
-      //{ id: 'childDeviceAvailable', label: 'Child devices', value: 'childDeviceAvailable' },
+     
       { id: 'c8y_AvailabilityStatus', label: 'Availability status', value: 'c8y_AvailabilityStatus' },
       { id: 'c8y_ConnectionStatus',label: 'Connection status', value: 'c8y_ConnectionStatus' },
       { id: 'c8y_FirmwareName', label: 'Firmware name', value: 'c8y_FirmwareName' },
@@ -129,12 +146,9 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
         id: 'c8y_RequiredAvailabilityResponseInterval'
         , label: 'Required availability', value: 'c8y_RequiredAvailabilityResponseInterval'
       },
-    //  { id: 'creationTime', label: 'Creation time', value: 'creationTime' },
-      //{ id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
-      //{ id: 'externalId', label: 'External id', value: 'externalId' },
-      //{ id: 'externalType', label: 'External type', value: 'externalType' },
+    
       { id: 'c8y_ActiveAlarmsStatus', label: 'Active alarms status', value: 'c8y_ActiveAlarmsStatus' },
-    //  { id: 'other', label: 'Other', value: 'other' }
+   
     ];
     if (!this.config.fpProps) {
       this.config.fpProps = ['Availability', 'ActiveAlarmsStatus'];

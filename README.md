@@ -1,17 +1,60 @@
-# Cumulocity widget plugin
+# Cumulocity Asset Overview widget plugin
 
-This is the Cumulocity module federation plugin. Plugins can be developed like any Cumulocity application, but can be used at runtime by other applications. Therefore, they export an Angular module which can then be imported by any other application. The exports are defined in `package.json`:
+The Asset Overview Widget Plugin is the Cumulocity module federation plugin created using c8ycli.This plugin can be used 
+in Application Builder or Cockpit.The Asset Overview Plugin helps you to display assets/devices in tree structure and data 
+in the table view along with the navigation to the dashboards.
 
-```
-"exports": [
-  {
-     "name": "Example widget plugin",
-     "module": "WidgetPluginModule",
-     "path": "./widget/widget-plugin.module.ts",
-     "description": "Adds custom widget"
-  }
-]
-```
+
+### Please choose Asset Viewer Widget release based on Cumulocity/Application builder version:
+
+|APPLICATION BUILDER | CUMULOCITY | ASSET VIEWER WIDGET PLUGIN  |
+|--------------------|------------|-----------------------------|
+| 2.0.x              | >= 1018.x.x| 1.x.x                       |
+
+
+
+## Features
+
+*  **Display Assets/Devices:** Display Assets/Devices in tree structure mode.It also supports child devices/assets.
+
+*  **Configurable Columns:** User can choose what to display in each page of tiles from available list and also option to display custom field.
+
+*  **Dashboard Settings (App Builder only):** Ability to navigate to dashboard by providing dashboard Id.
+
+*  **Custom Icon:**  Select and upload the icon for the device where default image is not available
+
+
+## Prerequisites:
+   Cumulocity c8ycli >=1018.x.x
+   
+
+## Installation
+
+### Runtime Widget Deployment?
+
+* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems --> Applications --> Packages 
+
+## QuickStart
+
+This guide will teach you how to add widget in your existing or new dashboard.
+
+1. Open your application from App Switcher
+
+2. Add new dashboard or navigate to existing dashboard
+
+3. Click `Add Widget`
+
+4. Search for `Asset Viewer`
+
+5. Select `Target Assets or Devices`
+
+7. Click `Save`
+
+Congratulations! Asset Viewer is configured.
+
+
+## User Guide
+
 
 **How to start**
 Run the command below to scaffold a `widget` plugin.

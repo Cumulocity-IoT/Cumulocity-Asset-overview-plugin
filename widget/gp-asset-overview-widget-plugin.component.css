@@ -1,18 +1,13 @@
 .btn-default btn-icon {
     text-align: left;
     padding: auto;
-
 }
-
-
 .mat-tree-node {
     display: list-item;
     align-items: baseline;
     flex: 1;
     word-wrap: break-word;
-
 }
-
 .col-sm-3 {
     border-color: aquamarine;
 }
@@ -28,32 +23,34 @@ li[aria-expanded='true']>ul {
 li>span:hover {
     cursor: pointer;
 }
-
 .card {
     padding: 0px 0px 0px 9px;
     box-shadow: none;
-
+    
 }
-
+.card-inner-scroll
+ {
+    overflow:hidden;
+}
+.refresh-panel {
+    float: right;
+  }
 .assetName {
     font-size: 12px;
     font-weight: 500;
     display: inline-block;
     margin-top: 5px;
 }
-
 .iconClass {
     position: relative;
     top: -3px;
     cursor: pointer;
 }
-
 .assetCard {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 20px !important;
 }
-
 .asset-name {
     margin-left: 10px;
     cursor: pointer;
@@ -62,41 +59,33 @@ li>span:hover {
     font-family: Roboto, Helvetica, Arial, sans-serif;
     margin-top: 12px; */
 }
-
 .asset-c8y-tree-view-node {
     position: relative;
     display: block;
 }
-
 .asset-overview-root:before {
     border-bottom: none !important;
     border-left: none !important;
 }
-
 .asset-overview-root:after {
     border-bottom: none !important;
     border-left: none !important;
 }
-
 .asset-overview-root ul {
     padding-inline-start: 20px;
 }
-
 .asset-overview-tree-card:first-child {
     margin-left: -30px;
 }
-
 .c8y-tree-view-node__block {
     margin-bottom: var(--c8y-unit-base);
     border: 1px solid #ccc6;
     border-radius: 0px;
     padding-left: 5px;
 }
-
 .c8y-tree-view-node__block:hover {
-    background-color: rgb(173, 233, 235);
+    background-color: rgb(85 218 222)
 }
-
 .collapse-expand-icon {
     float: right;
     margin-top: 5px;
@@ -104,66 +93,51 @@ li>span:hover {
     margin-right: 5px;
     cursor: pointer;
 }
-
 .text-truncate {
     display: inline-block !important;
 }
-
 .criticalAlerts {
     background-color: #e0000e;
 }
-
 .majorAlerts {
     background-color: #e66400;
 }
-
 .minorAlerts {
-    background-color: #ff801f;
+    background-color: #f66f08;
 }
-
 .warningAlerts {
     background-color: #1c8ce3;
 }
-
 .criticalAlerts2 {
     color: #e0000e;
 }
-
 .majorAlerts2 {
     color: #e66400;
 }
-
 .minorAlerts2 {
     color: #ff801f;
 }
-
 .warningAlerts2 {
     color: #1c8ce3;
 }
-
 .majorAlert {
     color: #e66400;
 }
-
 td {
     border-bottom: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
-
 .active>div {
-    background-color: rgb(173, 233, 235);
+    background-color:rgb(68 189 193);
 }
-
 ul {
     margin: 0;
     padding-left: 25px;
 }
-
 ul li {
     position: relative;
 }
-
 ul li:before {
     position: absolute;
     top: -8px;
@@ -175,12 +149,10 @@ ul li:before {
     border-bottom: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
     border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
 }
-
 /* hide the vertical line on the first item */
 ul.asset-c8y-tree-view-node>li:first-child:before {
     border-left: none;
 }
-
 ul li:after {
     position: absolute;
     top: 10px;
@@ -190,39 +162,31 @@ ul li:after {
     content: "";
     border-left: 1px solid var(--c8y-component-brand-primary, var(--c8y-root-component-brand-primary));
 }
-
 /* hide the lines on the last item */
 ul li:last-child:after {
     display: none;
 }
-
 .asset-overview-pager {
     padding: 5px;
     cursor: pointer;
 }
-
 .two-column-table {
     margin-top: 10px;
 }
-
 .two-column-table td {
     padding: 3px;
     line-height: 2;
 }
-
 .two-column-table tr {
     line-height: 10px;
 }
-
 .two-column-table tbody {
     display: block;
 }
-
 .first {
     width: 20%;
     display: inline-block;
 }
-
 .second {
     width: 35%;
     display: inline-block;
@@ -232,12 +196,17 @@ ul li:last-child:after {
     width: 30%;
     display: inline-block;
 }
-
 @media screen and (max-width: 500px) {
-
     .first,
     .second,
     .third {
         width: 70%;
     }
+}
+.card.card-dashboard > .card-inner-scroll {
+    overflow: hidden;
+}
+.btn-clean
+{
+    padding: 7px;
 }

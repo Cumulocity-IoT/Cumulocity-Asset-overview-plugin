@@ -1,3 +1,32 @@
+<body style="overflow: hidden;">
+<!-- <div *ngIf="isBusy">
+  <c8y-loading></c8y-loading>
+</div> -->
+<div class="row">
+  <div class="col-sm-12 " style="margin-bottom: 10px;display:flex; justify-content:end;align-items:end;">
+    <label for="pageSize" class="control-label">Items per page</label>
+    <div>
+      <div class="col-sm-1">
+        <select style="width: auto;" id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">20</option>
+          <option value="15">50</option>
+          <option value="15">100</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+      <!-- <div class="refresh-panel">
+        <button type="button" class="btn btn-link" (click)="refresh()"><span class="fa fa-refresh"></span></button>
+      </div> -->
+      <div class="refresh-panel">
+        <button type="button" class="btn btn-clean" (click)="refresh()"><i c8yIcon="refresh"></i></button>
+       
+     </div>
+    </div>
+  </div>
+</div></body>
+<c8y-loading *ngIf="isBusy"></c8y-loading>
 <div class="card">
   <div class="row col-md-12 card-group">
     <div class="col-md-3">
@@ -7,34 +36,27 @@
         <ng-template #treeViewList let-list>
           <ul [attr.role]="role">
             <li *ngFor="let asset of list ;let i=index" [class.active]="selectedAsset=== asset?.deviceMO?.id"
-            [ngClass]="{'expanded' : true, 'asset-overview-root' : asset.isRoot}" [attr.aria-expanded]="asset.visible"
+              [ngClass]="{'expanded' : true, 'asset-overview-root' : asset.isRoot}" [attr.aria-expanded]="asset.visible"
               class="asset-c8y-tree-view-node" style="padding-left: calc(var(--indent)*16px);">
-              <div class="c8y-tree-view-node__block" >
-                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-device" *ngIf="asset?.deviceMO?.c8y_IsDevice" (click)="loadAssetData(asset)"></i>
-                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-enterprise" *ngIf="asset?.deviceMO?.c8y_IsAsset" (click)="loadAssetData(asset)"></i>
+              <div class="c8y-tree-view-node__block">
+                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-device" *ngIf="asset?.deviceMO?.c8y_IsDevice"
+                  (click)="loadAssetData(asset)"></i>
+                <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-enterprise" *ngIf="asset?.deviceMO?.c8y_IsAsset"
+                  (click)="loadAssetData(asset)"></i>
                 <i class="iconClass c8y-icon c8y-icon-duocolor c8y-icon-group"
-                  *ngIf="!asset?.deviceMO?.c8y_IsDevice && !asset?.deviceMO?.c8y_IsAsset" (click)="loadAssetData(asset)"></i>
-
+                  *ngIf="!asset?.deviceMO?.c8y_IsDevice && !asset?.deviceMO?.c8y_IsAsset"
+                  (click)="loadAssetData(asset)"></i>
                 <span class="asset-name text-truncate" (click)="loadAssetData(asset)">{{asset?.deviceMO?.name}} </span>
-            
-                <i class="collapse-expand-icon"
-                (click)="expandAsset(asset);loadAssetData(asset)"
+                <i class="collapse-expand-icon" (click)="expandAsset(asset);loadAssetData(asset)"
                   [ngClass]="asset.children && objectKeys(asset.children).length === 0 ? 'empty-space': ''"
                   id="collapse-button"
                   [c8yIcon]="(asset.children && objectKeys(asset.children).length > 0 || asset.hasChild)  ?  (asset.visible ?  'collapse-arrow': 'expand-arrow') : '' "></i>
-                  <i c8yIcon="spinner" class="iconClass asset-name icon-spin" *ngIf="asset.isLoading" ></i>
-                 <!--  <pager *ngIf="selectedAsset=== asset?.deviceMO?.id" [style.visibility]="totalRecord === -1? 'hidden': 'visible'" class="asset-overview-pager pull-right"
-                  [totalItems]="totalRecord"
-                  pageBtnClass="btn btn-link"
-                  previousText="<<"
-                  nextText=">>"
-                  [itemsPerPage]="pageSize"
-                  [(ngModel)]="currentPage" (pageChanged)="getPageEvent(asset,$event)"
-                ></pager> -->
-                <i [c8yIcon]="'panel-control-down'" *ngIf="selectedAsset=== asset?.deviceMO?.id" 
-                class="asset-overview-pager pull-right" title="Load More"
-                [style.visibility]="totalRecord === -1 || !isMorePages ? 'hidden': 'visible'" (click)="getPageEvent(asset)"></i>
-                </div>
+                <i c8yIcon="spinner" class="iconClass asset-name icon-spin" *ngIf="asset.isLoading"></i>
+                <i [c8yIcon]="'panel-control-down'" *ngIf="selectedAsset=== asset?.deviceMO?.id"
+                  class="asset-overview-pager pull-right" title="Load More"
+                  [style.visibility]="totalRecord === -1 || !isMorePages ? 'hidden': 'visible'"
+                  (click)="getPageEvent(asset)"></i>
+              </div>
               <ng-container *ngTemplateOutlet="treeViewList;
                               context:{$implicit: asset.children, role:'group'}">
               </ng-container>
@@ -42,8 +64,6 @@
           </ul>
         </ng-template>
       </div>
-
-
     </div>
     <div class="col-md-9" *ngIf="!isBusy">
       <!-- <div class="row" style="background-color: rgb(243, 137, 0);"> -->
@@ -58,9 +78,8 @@
                   <span *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"><img [src]="data.assetImage"
                       style="width:125px; height:140px;margin-top: 10px;margin-left: 10px;"></span>
                   <span *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i [c8yIcon]="markerIcon"
-                      style="font-size:110px;width: 185px; height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
+                      style="font-size:110px;max-width:185px;max-height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
                 </div>
-
                 <table class="two-column-table second">
                   <tbody>
                     <ng-container *ngFor="let page1 of config.p1Props;">
@@ -113,16 +132,39 @@
           </div>
         </ng-container>
       </div>
-      <div class="row col-md-12">
-        <div class="col-md-8"></div>
-        <div class="col-md-4">
-          
+      <!-- <div class="row">
+        <div class="col-sm-6 form-horizontal">
+          <div class="col-sm-12 " style="margin-bottom: 10px;display: flex; justify-content: center;">
+            <label for="pageSize" class=" control-label">Items per page</label>
+            <div class="col-sm-3">
+              <select style="width: auto;" id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="15">20</option>
+                <option value="15">25</option>
+                 Add more options as needed -->
+      <!-- </select>
+            </div>
+          </div>
         </div>
-      </div>
-      <!-- </div> -->
+      </div> -->
     </div>
+
   </div>
-</div>
-<div *ngIf="isBusy">
-  <c8y-loading></c8y-loading>
-</div>
+
+
+
+    <!-- <div class="row">
+    <div class="col-sm-6 form-horizontal">
+      <div class="col-sm-12 " style="margin-bottom: 10px;">
+        <label for="pageSize" class=" col-sm-6 control-label" style="margin-left: -20px;">Page Size:</label>
+        <div class="col-sm-6 ">  
+      <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+         Add more options as needed -->
+    <!-- </select>
+    </div>
+  </div> -->
