@@ -38,7 +38,7 @@ in the table view along with the navigation to the dashboards.
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems --> Applications --> Packages 
+* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems  --> Packages 
 
 ## QuickStart
 
