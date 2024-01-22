@@ -17,11 +17,15 @@ in the table view along with the navigation to the dashboards.
 
 *  **Display Assets/Devices:** Display Assets/Devices in tree structure mode.It also supports child devices/assets.
 
+*  **Display Assets/Devices in Tree Structure:** We can expand and collapse the devices and assets using the tree structure.
+
+*  **Display Assets/Devices in Tree Structure:** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
+     
 *  **Configurable Columns:** User can choose what to display in each page of tiles from available list and also option to display custom field.
 
 *  **Dashboard Settings (App Builder only):** Ability to navigate to dashboard by providing dashboard Id.
 
-*  **Custom Icon:**  Select and upload the icon for the device where default image is not available
+*  **Custom Icon:**  Select and upload the icon for the device where default image is not available.
 
 
 ## Prerequisites:
@@ -52,8 +56,21 @@ This guide will teach you how to add widget in your existing or new dashboard.
 
 Congratulations! Asset Viewer is configured.
 
-
 ## User Guide
+
+ 
+*  **Target assets or devices:** User can select a device/asset or device/asset group. If group is selected, list of devices/assets will be display in the tree strucure and details can be viewed in a table.
+*  **UI Pagination:** User can select the page size from the UI using the drop down.
+*  **Config Pagination:** User can select the page size from the configaration you can edit the plugin and set the page size.
+*   **Upload Default Icon For Device:** User can select the drop down upload the icon for the device where default image is not available
+*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset ordevices will be viewed as a table in the UI
+*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset ordevices will be viewed as a table in the UI
+*  **Refresh:** Useful for force reload/refresh devices.
+*  **Dashboard Settings(Application Builder Only):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
+    * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
+    * **Dashboard ID:** Dashboard ID of a dashboard where user need to navigate. You can find dashboard id in browser URL.
+    * **DeviceId as TabGroup:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
+    * **TabGroup ID(optional):** If your dashboard is based on tabgroup then provide tabgroup id.
 
 
 **How to start**
@@ -62,7 +79,6 @@ Run the command below to scaffold a `widget` plugin.
 ```
 c8ycli new <yourPluginName> widget-plugin
 ```
-
 As the app.module is a typical Cumuloctiy application, any new plugin can be tested via the CLI:
 
 ```
