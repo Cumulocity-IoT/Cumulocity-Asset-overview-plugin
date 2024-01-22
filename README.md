@@ -5,9 +5,9 @@ in Application Builder or Cockpit.The Asset Overview Plugin helps you to display
 in the table view along with the navigation to the dashboards.
 
 
-### Please choose Asset Viewer Widget release based on Cumulocity/Application builder version:
+### Please choose Asset Overview Widget release based on Cumulocity/Application builder version:
 
-|APPLICATION BUILDER | CUMULOCITY | ASSET VIEWER WIDGET PLUGIN  |
+|APPLICATION BUILDER | CUMULOCITY | ASSET OVERVIEW WIDGET PLUGIN  |
 |--------------------|------------|-----------------------------|
 | 2.0.x              | >= 1018.x.x| 1.x.x                       |
 
@@ -19,9 +19,9 @@ in the table view along with the navigation to the dashboards.
 
 *  **Display Assets/Devices:** Display Assets/Devices in tree structure mode.It also supports child devices/assets.
 
-*  **Display Assets/Devices in Tree Structure:** We can expand and collapse the devices and assets using the tree structure.
+*  **Display Assets/Devices in Tree Structure:** We can expand and collapse the hierrachal view of the tree structure.
 
-*  **Display Assets/Devices in Tree Structure:** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
+*  **Pagination** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
      
 *  **Configurable Columns:** User can choose what to display in each page of tiles from available list and also option to display custom field.
 
@@ -50,13 +50,13 @@ This guide will teach you how to add widget in your existing or new dashboard.
 
 3. Click `Add Widget`
 
-4. Search for `Asset Viewer`
+4. Search for `Asset Overview`
 
 5. Select `Target Assets or Devices`
 
 7. Click `Save`
 
-Congratulations! Asset Viewer is configured.
+Congratulations! Asset OVerview is configured.
 
 ## User Guide
 
