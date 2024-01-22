@@ -13,6 +13,8 @@ in the table view along with the navigation to the dashboards.
 
 ![Asset-Overview](assets/overview.PNG)
 
+![Asset-Overview](assets/configoverview.PNG)
+
 ## Features
 
 *  **Display Assets/Devices:** Display Assets/Devices in tree structure mode.It also supports child devices/assets.
