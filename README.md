@@ -56,7 +56,7 @@ This guide will teach you how to add widget in your existing or new dashboard.
 
 7. Click `Save`
 
-Congratulations! Asset OVerview is configured.
+Congratulations! Asset Overview is configured.
 
 ## User Guide
 
