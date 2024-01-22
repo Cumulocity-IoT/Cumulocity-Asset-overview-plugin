@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+ * Copyright (c) 2024 Software AG, Darmstadt, Germany and/or its licensors
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
-import { Observable, from, Subject, Subscription, BehaviorSubject, combineLatest } from "rxjs";
+
 import { IManagedObject, InventoryService } from '@c8y/client';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as ImageData from './gp-default-image';
@@ -547,7 +547,7 @@ async onPageSizeChange()
   this.matData = [];
   
  this.isBusy = true;
-  this.assetTreeNodeService.resetTree();
+this.assetTreeNodeService.resetTree();
  let inventory = await this.inventoryService.detail(this.configDevice);
   this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
    this.dataSource = [this.rootNode];

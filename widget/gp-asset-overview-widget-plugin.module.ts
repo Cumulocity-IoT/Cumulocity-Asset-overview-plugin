@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020 Software AG, Darmstadt, Germany and/or its licensors
+ * Copyright (c) 2024 Software AG, Darmstadt, Germany and/or its licensors
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -16,16 +16,16 @@
  * limitations under the License.
  */
 
+
 // Assets need to be imported into the module, or they are not available
-import { assetPaths } from '../assets/assets';
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GPAssetOverviewWidgetPluginComponent } from './gp-asset-overview-widget-plugin.component';
 import { GPAssetOverviewWidgetPluginConfig } from './gp-asset-overview-widget-plugin-config.component';
-import { FormsModule, CoreModule, HOOK_COMPONENTS } from '@c8y/ngx-components';
+import { FormsModule, CoreModule, HOOK_COMPONENTS, hookComponent } from '@c8y/ngx-components';
 import { MatTableModule } from '@angular/material/table';
 import * as preview from './preview-image';
-
 import { IconSelectorComponent } from '../widget/icon-selector/icon-selector.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
@@ -44,10 +44,9 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
   ],
   exports: [IconSelectorComponent, GpAssetOverviewWidgetService],
   providers: [
-    {
-      provide: HOOK_COMPONENTS,
-      multi: true,
-      useValue: {
+     hookComponent({
+      
+      
         id: 'asset-overview-plugin',
         label: 'Asset Overview',
         description: 'The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards',
@@ -58,16 +57,15 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
           ng1: {
             options: {
               noDeviceTarget: false,
+              multi: true,
               noNewWidgets: false,
               deviceTargetNotRequired: false,
               groupsSelectable: true
             }
           }
         }
-      }
-    }
+      })
   ]
-
 })
 
 export class GpAssetOverviewWidgetPluginModule { }

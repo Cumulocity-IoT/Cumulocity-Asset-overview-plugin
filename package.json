@@ -90,6 +90,10 @@
         {
           "from": "assets/assetoverview.PNG",
           "to": "assets/assetoverview.PNG"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE.txt"
         }
       ]
     },
