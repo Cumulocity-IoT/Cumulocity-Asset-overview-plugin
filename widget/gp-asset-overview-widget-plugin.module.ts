@@ -47,7 +47,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
      hookComponent({
       
       
-        id: 'asset-overview-plugin',
+        id: 'global-presales-asset-overview-plugin',
         label: 'Asset Overview',
         description: 'The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards',
         component: GPAssetOverviewWidgetPluginComponent,
