@@ -13,10 +13,10 @@ in the table view along with the navigation to the dashboards.
 | 2.0.x              | >= 1018.x.x| 1.x.x                       |
 
 
-![Asset-Overview](assets/overview.PNG)
+<kbd>![Asset-Overview](assets/overview.PNG) </kbd>
 
 
-![Asset-Overview-Config](assets/config.PNG)
+<kbd>![Asset-Overview-Config](assets/config.PNG) </kbd>
 
 
 ## Features
