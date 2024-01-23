@@ -7,13 +7,17 @@ in the table view along with the navigation to the dashboards.
 
 ### Please choose Asset Overview Widget release based on Cumulocity/Application builder version:
 
-|APPLICATION BUILDER | CUMULOCITY | ASSET OVERVIEW WIDGET PLUGIN  |
+
+|APPLICATION BUILDER&nbsp;|&nbsp;CUMULOCITY&nbsp;|&nbsp;ASSET OVERVIEW WIDGET PLUGIN&nbsp;|
 |--------------------|------------|-----------------------------|
 | 2.0.x              | >= 1018.x.x| 1.x.x                       |
 
+
 ![Asset-Overview](assets/overview.PNG)
 
-![Asset-Overview](assets/config.PNG)
+
+![Asset-Overview-Config](assets/config.PNG)
+
 
 ## Features
 
