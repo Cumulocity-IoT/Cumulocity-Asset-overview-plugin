@@ -92,6 +92,14 @@
           "to": "assets/assetoverview.PNG"
         },
         {
+          "from": "assets/config.PNG",
+          "to": "assets/config.PNG"
+        },
+        {
+          "from": "README.md",
+          "to": "README.md"
+        },
+        {
           "from": "LICENSE",
           "to": "LICENSE.txt"
         }

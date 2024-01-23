@@ -13,7 +13,7 @@ in the table view along with the navigation to the dashboards.
 
 ![Asset-Overview](assets/overview.PNG)
 
-![Asset-Overview](assets/configoverview.PNG)
+![Asset-Overview](assets/config.PNG)
 
 ## Features
 
