@@ -88,8 +88,8 @@
       },
       "copy": [
         {
-          "from": "assets/assetoverview.PNG",
-          "to": "assets/assetoverview.PNG"
+          "from": "assets/overview.PNG",
+          "to": "assets/overview.PNG"
         },
         {
           "from": "assets/config.PNG",

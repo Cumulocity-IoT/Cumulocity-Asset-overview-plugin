@@ -78,21 +78,8 @@ Congratulations! Asset Overview is configured.
     * **DeviceId as TabGroup:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
     * **TabGroup ID(optional):** If your dashboard is based on tabgroup then provide tabgroup id.
 
+------------------------------
 
-**How to start**
-Run the command below to scaffold a `widget` plugin.
-
-```
-c8ycli new <yourPluginName> widget-plugin
-```
-As the app.module is a typical Cumuloctiy application, any new plugin can be tested via the CLI:
-
-```
-npm start -- --shell cockpit
-```
-
-In the Module Federation terminology, `widget` plugin is called `remote` and the `cokpit` is called `shell`. Modules provided by this `widget` will be loaded by the `cockpit` application at the runtime. This plugin provides a basic custom widget that can be accessed through the `Add widget` menu.
-
-> Note that the `--shell` flag creates a proxy to the cockpit application and provides` WidgetPluginModule` as an `remote` via URL options.
-
-Also deploying needs no special handling and can be simply done via `npm run deploy`. As soon as the application has exports it will be uploaded as a plugin.
+This widget is provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+_____________________
+For more information you can Ask a Question in the [TECH Community Forums](https://tech.forums.softwareag.com/tag/Cumulocity-IoT).
