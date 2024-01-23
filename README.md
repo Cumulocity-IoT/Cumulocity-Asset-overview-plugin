@@ -25,9 +25,9 @@ in the table view along with the navigation to the dashboards.
 
 *  **Display Assets/Devices in Tree Structure:** We can expand and collapse the hierrachal view of the tree structure.
 
-*  **Pagination** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
+*  **Pagination:** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
      
-*  **Configurable Columns:** User can choose what to display in each page of tiles from available list and also option to display custom field.
+*  **Configurable Columns:** User can choose what to display in each page of tiles from available list.
 
 *  **Dashboard Settings (App Builder only):** Ability to navigate to dashboard by providing dashboard Id.
 
@@ -69,8 +69,8 @@ Congratulations! Asset Overview is configured.
 *  **UI Pagination:** User can select the page size from the UI using the drop down.
 *  **Config Pagination:** User can select the page size from the configaration you can edit the plugin and set the page size.
 *   **Upload Default Icon For Device:** User can select the drop down upload the icon for the device where default image is not available
-*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset ordevices will be viewed as a table in the UI
-*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset ordevices will be viewed as a table in the UI
+*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI
+*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI
 *  **Refresh:** Useful for force reload/refresh devices.
 *  **Dashboard Settings(Application Builder Only):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
