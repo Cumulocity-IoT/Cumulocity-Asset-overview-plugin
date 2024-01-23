@@ -42,7 +42,7 @@ in the table view along with the navigation to the dashboards.
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems  --> Extensions
+* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.0.0/sag-ps-pkg-asset-overview-1.0.0.zip) and install via Administrations --> Ecosystems  --> Extensions
 
 ## QuickStart
 
