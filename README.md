@@ -42,7 +42,7 @@ in the table view along with the navigation to the dashboards.
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems  --> Packages 
+* This widget support runtime deployment. Download [Runtime Binary]() and install via Administrations --> Ecosystems  --> Extensions
 
 ## QuickStart
 
@@ -58,6 +58,8 @@ This guide will teach you how to add widget in your existing or new dashboard.
 
 5. Select `Target Assets or Devices`
 
+6. Follow the user guide and configure the relevant fields.
+
 7. Click `Save`
 
 Congratulations! Asset Overview is configured.
@@ -72,7 +74,7 @@ Congratulations! Asset Overview is configured.
 *  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI
 *  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI
 *  **Refresh:** Useful for force reload/refresh devices.
-*  **Dashboard Settings(Application Builder Only):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
+*  **Dashboard Settings(Application Builder/Blue Print Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
     * **Dashboard ID:** Dashboard ID of a dashboard where user need to navigate. You can find dashboard id in browser URL.
     * **DeviceId as TabGroup:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
