@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
 
 import { IManagedObject, InventoryService } from '@c8y/client';
@@ -55,7 +55,7 @@ export interface DeviceData {
   externalId?: string;
   externalType?: string;
   c8y_ActiveAlarmsStatus?: any;
-  
+
 }
 
 @Component({
@@ -91,7 +91,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   pageSize = 5;
   totalRecord = -1;
   isMorePages = true;
-  
+
 
   constructor(
     private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService,
@@ -100,10 +100,10 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   async ngOnInit() {
 
     this.appId = await this.deviceList.getAppId();
-   if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
-     this.pageSize = Number(this.config.pageSize);
+    if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
+      this.pageSize = Number(this.config.pageSize);
     }
-   
+
     if (!this.config.device) {
       this.config.device = {};
     }
@@ -116,7 +116,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.dataSource = [this.rootNode];
       this.isBusy = true;
       await this.getAllDevices(this.rootNode, this.configDevice);
-   
+
     }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
@@ -142,7 +142,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     // Split selectedInputs and selectedInputLabels into groups of five
     this.groupedInputs = this.chunkArray(this.selectedInputs, 5);
     this.groupedLabels = this.chunkArray(this.selectedInputLabels, 5);
-   
+
 
   }
 
@@ -157,9 +157,9 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
 
   // Navigate URL to dashboard if dashboard is exist
   navigateURL(deviceId: string, deviceType: string) {
-   
+
     if (deviceType && this.appId) {
-    
+
       const dashboardObj = this.configDashboardList.find((dashboard) => dashboard.type === deviceType);
       if (dashboardObj && dashboardObj.templateID) {
         if (dashboardObj.withTabGroup) {
@@ -169,7 +169,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
           this.router.navigate([
             `/application/${this.appId}/tabgroup/${dashboardObj.tabGroupID}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         } else {
-         
+
           this.router.navigate([`/application/${this.appId}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         }
       }
@@ -183,32 +183,32 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
      */
   async getAllDevices(rootNode: any, deviceId: string, fromPagination?) {
 
-    
+
     let allDevices: any = null;
     const assetResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Assets');
     allDevices = (assetResponse.data ? assetResponse.data : []);
-    
+
     if (assetResponse.data && assetResponse.data.length > 0 && assetResponse.data.length < this.pageSize) {
       this.totalRecord = (this.pageSize * (assetResponse.paging.totalPages - 1)) + assetResponse.data.length;
-     
+
     } else {
-     
+
       this.totalRecord = this.pageSize * assetResponse.paging.totalPages;
     }
 
     const deviceResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Devices');
     allDevices = (deviceResponse.data ? allDevices.concat(deviceResponse.data) : allDevices);
-   
+
     if (deviceResponse.data && deviceResponse.data.length > 0 && deviceResponse.data.length < this.pageSize) {
-    
+
       this.totalRecord = this.totalRecord + (this.pageSize * (deviceResponse.paging.totalPages - 1)) + deviceResponse.data.length;
     } else {
-     
+
       this.totalRecord = this.totalRecord + this.pageSize * deviceResponse.paging.totalPages;
     }
-    if ((this.totalRecord < (this.currentPage * this.pageSize)) ) { this.isMorePages = false; }
+    if ((this.totalRecord < (this.currentPage * this.pageSize))) { this.isMorePages = false; }
     if (this.pageSize <= 5) { this.isMorePages = true }
-   
+
     if (allDevices) {
       for (const asset of allDevices) {
         this.rootNode = this.assetTreeNodeService.insertChildNode(rootNode, asset)
@@ -217,11 +217,11 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.totalRecord = -1;
     }
     this.dataSource = [];
-    
+
     this.dataSource = [this.rootNode];
-   
+
     this.loadAssetData(rootNode);
-   
+
     this.isBusy = false;
   }
 
@@ -230,7 +230,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     return deviceFound.data;
   }
   async expandAsset(devices) {
-    
+
     this.selectedAsset = devices?.deviceMO?.id;
     this.totalRecord = -1;
     this.currentPage = 1;
@@ -268,7 +268,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     this.selectedAsset = asset?.deviceMO?.id;
     this.matData = [];
     let deviceData = await this.mapAssetData(asset.deviceMO);
-    
+
     this.matData.push(deviceData);
     if (asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
@@ -329,20 +329,22 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       deviceData.other = this.getTheValue(asset, this.otherProp.value);
       deviceData.other = JSON.stringify(deviceData.other);
     }
-
-    this.dynamicDisplayColumns.forEach(element => {
-      deviceData[element.value] = this.getTheValue(asset, element.value);
-      deviceData[element.value] = JSON.stringify(this.getTheValue(asset, element.value));
-    });
+    if (this.dynamicDisplayColumns) {
+      this.dynamicDisplayColumns.forEach(element => {
+        deviceData[element.value] = this.getTheValue(asset, element.value);
+        deviceData[element.value] = JSON.stringify(this.getTheValue(asset, element.value));
+      });
+    }
     return deviceData;
   }
 
   loadChildAssets(childAssets) {
-    
-    childAssets.forEach(async (data) => {
-      let deviceData = await this.mapAssetData(data?.deviceMO);
-    this.matData.push(deviceData);
-    })
+    if (childAssets) {
+      childAssets.forEach(async (data) => {
+        let deviceData = await this.mapAssetData(data?.deviceMO);
+        this.matData.push(deviceData);
+      })
+    }
   }
 
 
@@ -519,14 +521,14 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     this.dataSource = [];
     let inventory = await this.inventoryService.detail(this.configDevice);
     this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
-     this.dataSource = [this.rootNode];
-    
- 
-  this.matData=true;
+    this.dataSource = [this.rootNode];
+
+
+    this.matData = true;
     this.getAllDevices(this.rootNode, this.configDevice);
-    
-   this.isBusy = false;
-   
+
+    this.isBusy = false;
+
   }
   /**
    * Clear all Realtime subscriptions
@@ -534,30 +536,29 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   private clearSubscriptions() {
     if (this.allSubscriptions) {
       this.allSubscriptions.forEach((s) => {
-     
+
       });
     }
   }
-  
 
-async onPageSizeChange()
-{
- 
-  this.dataSource = [];
-  this.matData = [];
-  
- this.isBusy = true;
-this.assetTreeNodeService.resetTree();
- let inventory = await this.inventoryService.detail(this.configDevice);
-  this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
-   this.dataSource = [this.rootNode];
 
-this.matData=true;
-  this.getAllDevices(this.rootNode, this.configDevice);
-  this.isBusy = false;
-  
- 
-  
-}
+  async onPageSizeChange() {
+
+    this.dataSource = [];
+    this.matData = [];
+
+    this.isBusy = true;
+    this.assetTreeNodeService.resetTree();
+    let inventory = await this.inventoryService.detail(this.configDevice);
+    this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
+    this.dataSource = [this.rootNode];
+
+    this.matData = true;
+    await this.getAllDevices(this.rootNode, this.configDevice);
+    this.isBusy = false;
+
+
+
+  }
 
 }

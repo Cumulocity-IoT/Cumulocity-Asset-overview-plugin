@@ -2,23 +2,21 @@
     width: 100%;
 }
 
-.config-accordion {
+.asset-overview-accordion {
     padding-bottom:10px;
 }
 
-.config-accordion label {
+.asset-overview-accordion label {
     font-size: 12px;
 }
-.config-accordion input, .config-accordion select, .config-accordion ng-select {
-    font-size: 12px;
-    margin: 5px;
-}
-
-
-
-.config-accordion input,
-.config-accordion select,
-.config-accordion ng-select {
+.asset-overview-accordion input, .asset-overview-accordion select, .asset-overview-accordion ng-select {
     font-size: 12px;
     margin: 5px;
 }
+
+.asset-overview-mt-10 {
+    margin-top: 10px;
+}
+
+
+

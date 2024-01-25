@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit, isDevMode } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SELECTION_MODEL_FACTORY } from '@ng-select/ng-select';
 import { DefaultSelectionModelFactory } from '../widget/icon-selector/selection-model'
@@ -39,7 +39,7 @@ export interface DashboardConfig {
   selector: 'gp-asset-overview-widget-plugin-config',
   templateUrl: './gp-asset-overview-widget-plugin-config.html',
   styleUrls: ['./../node_modules/@ng-select/ng-select/themes/default.theme.css', './gp-asset-overview-widget-plugin-config.component.css'],
- 
+  encapsulation: ViewEncapsulation.None,
   providers: [
     FormBuilder,
     { provide: SELECTION_MODEL_FACTORY, useValue: DefaultSelectionModelFactory }
@@ -84,7 +84,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   otherProp: boolean;
 
 
-  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,private fb: FormBuilder,) { }
+  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,private fb: FormBuilder,) {}
 
   async ngOnInit(): Promise<void> {
     this.appId = this. deviceList.getAppId();

@@ -108,9 +108,6 @@ export class assetTreeNodeService {
   }
   resetTree(){
     this.rootNode.cleartree();
-    
-
-
   }
 
 }
