@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component,  Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
+import {  FormBuilder, FormControl,  Validators } from '@angular/forms';
 import { SELECTION_MODEL_FACTORY } from '@ng-select/ng-select';
 import { DefaultSelectionModelFactory } from '../widget/icon-selector/selection-model'
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
-import { InventoryService } from '@c8y/client';
+import {  InventoryService } from '@c8y/client';
 import { MatTableDataSource } from '@angular/material/table';
+
 
 export interface Property {
   id: any;
@@ -46,9 +47,10 @@ export interface DashboardConfig {
   ],
 })
 
-export class GPAssetOverviewWidgetPluginConfig implements OnInit {
+export class GPAssetOverviewWidgetPluginConfig implements OnInit{
   propertiesToDisplay: Property[] = [];
   @Input() config: any = {};
+ 
   appId = null;
   managedObject: any;
   configDevice = '';
@@ -82,11 +84,28 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   otherPropList: boolean = false;
   selected: any;
   otherProp: boolean;
+  
+  
+  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,
+    private fb: FormBuilder) {}
 
 
-  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,private fb: FormBuilder,) {}
 
+ 
+  
+  // ngDoCheck(): void {
+  //   if (this.config.device && this.config.device.id !== this.configDevice) {
+  //     this.configDevice = this.config.device.id;
+  //     const context = this.config.device;
+  //     if (context?.id) {
+  //       this.datapointSelectionConfig.contextAsset = context;
+  //       this.datapointSelectionConfig.assetSelectorConfig
+  //     }
+  //   }
+  // }
   async ngOnInit(): Promise<void> {
+
+
     this.appId = this. deviceList.getAppId();
     
     if (!this.config.configDashboard) {
@@ -253,6 +272,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   commitToP2PropsConfig(props) {
     this.config.p2Props = props.data;
   }
+  
   /**
    * Get All devices's device type
    */
@@ -283,8 +303,8 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
     }
   }
 
-
   async ngDoCheck() {
+  
     if (this.config.device && this.config.device.id && this.config.device.id !== this.configDevice) {
       this.configDevice = this.config.device.id;
       this.getAllDevices(this.configDevice);
@@ -306,3 +326,4 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit {
   }
   
 }
+

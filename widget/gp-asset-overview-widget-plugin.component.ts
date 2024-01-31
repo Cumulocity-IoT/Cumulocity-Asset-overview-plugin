@@ -91,6 +91,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   pageSize = 5;
   totalRecord = -1;
   isMorePages = true;
+ 
 
 
   constructor(
@@ -99,10 +100,16 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   }
   async ngOnInit() {
 
+    console.log("config",this.config)
     this.appId = await this.deviceList.getAppId();
     if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
       this.pageSize = Number(this.config.pageSize);
     }
+
+    
+
+
+
 
     if (!this.config.device) {
       this.config.device = {};
@@ -268,11 +275,11 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     this.selectedAsset = asset?.deviceMO?.id;
     this.matData = [];
     let deviceData = await this.mapAssetData(asset.deviceMO);
-
+    console.log("matdata before push:",this.matData);
     this.matData.push(deviceData);
-    if (asset.children && asset.children.length > 0) {
+    if (/*this.config.showChildDevices &&*/ asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
-
+      console.log("matdata inside IF:",this.matData);
     }
   }
 
@@ -556,8 +563,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     this.matData = true;
     await this.getAllDevices(this.rootNode, this.configDevice);
     this.isBusy = false;
-
-
+    //this.config.showChildDevices;
 
   }
 
