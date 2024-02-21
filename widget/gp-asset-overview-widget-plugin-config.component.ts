@@ -16,15 +16,37 @@
  * limitations under the License.
  */
 
-import { Component,  Input, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
-import {  FormBuilder, FormControl,  Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
+import { FormControl, AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators, NgForm } from '@angular/forms';
 import { SELECTION_MODEL_FACTORY } from '@ng-select/ng-select';
 import { DefaultSelectionModelFactory } from '../widget/icon-selector/selection-model'
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
-import {  InventoryService } from '@c8y/client';
+import { InventoryService } from '@c8y/client';
 import { MatTableDataSource } from '@angular/material/table';
 
+import {
+  DatapointAttributesFormConfig,
+  DatapointSelectorModalOptions,
+  KPIDetails,
+} from '@c8y/ngx-components/datapoint-selector';
 
+import { takeUntil } from 'rxjs/operators';
+import { OnBeforeSave } from '@c8y/ngx-components';
+import { Observable, Subject } from 'rxjs';
+
+export function exactlyASingleDatapointActive(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const datapoints: any[] = control.value;
+    if (!datapoints || !datapoints.length) {
+      return null;
+    }
+    const activeDatapoints = datapoints.filter(datapoint => datapoint.__active);
+    if (activeDatapoints.length === 1) {
+      return null;
+    }
+    return { exactlyOneDatapointNeedsToBeActive: true };
+  };
+}
 export interface Property {
   id: any;
   label: string;
@@ -47,10 +69,10 @@ export interface DashboardConfig {
   ],
 })
 
-export class GPAssetOverviewWidgetPluginConfig implements OnInit{
+export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnBeforeSave {
   propertiesToDisplay: Property[] = [];
   @Input() config: any = {};
- 
+
   appId = null;
   managedObject: any;
   configDevice = '';
@@ -84,30 +106,37 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
   otherPropList: boolean = false;
   selected: any;
   otherProp: boolean;
-  
-  
-  constructor(private deviceList: GpAssetOverviewWidgetService, private invSvc: InventoryService,
-    private fb: FormBuilder) {}
 
+  datapointSelectDefaultFormOptions: Partial<DatapointAttributesFormConfig> = {
+    showRange: false,
+    showChart: false,
 
+  };
+  datapointSelectionConfig: Partial<DatapointSelectorModalOptions> = {};
+  formGroup: ReturnType<GPAssetOverviewWidgetPluginConfig['createForm']>;
+  private destroy$ = new Subject<void>();
+  activeDatapointsExists: boolean;
+  constructor(private deviceList: GpAssetOverviewWidgetService,
+    private fb: FormBuilder,
+    private form: NgForm,
+    private formBuilder: FormBuilder) { }
 
- 
-  
-  // ngDoCheck(): void {
-  //   if (this.config.device && this.config.device.id !== this.configDevice) {
-  //     this.configDevice = this.config.device.id;
-  //     const context = this.config.device;
-  //     if (context?.id) {
-  //       this.datapointSelectionConfig.contextAsset = context;
-  //       this.datapointSelectionConfig.assetSelectorConfig
-  //     }
-  //   }
-  // }
   async ngOnInit(): Promise<void> {
+ 
+    if (this.config.device && this.config.device.id) {
+      this.configDevice = this.config.device.id;
+      this.datapointSelectionConfig.contextAsset = this.config.device;
+      this.datapointSelectionConfig.assetSelectorConfig;
+    }
+    this.initForm();
+    this.formGroup.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.config.datapoints = [...value.datapoints];
+      });
 
+    this.appId = this.deviceList.getAppId();
 
-    this.appId = this. deviceList.getAppId();
-    
     if (!this.config.configDashboard) {
       this.config.configDashboard = false;
     }
@@ -138,14 +167,6 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
     if (this.config.selectedInputs && this.config.selectedInputs.indexOf('other') !== -1) {
       this.otherPropList = true;
     }
-    if (!this.config.dashboardList && this.appId) {
-   
-      const dashboardObj: DashboardConfig = {};
-      dashboardObj.type = 'All';
-      this.dashboardList.push(dashboardObj);
-      this.config.dashboardList = this.dashboardList;
-    }
-
     this.propertiesToDisplay = [
       { id: 'id', label: 'ID', value: 'id' },
       { id: 'name', label: 'Name', value: 'name' },
@@ -154,20 +175,14 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
       { id: 'lastUpdated', label: 'Last updated', value: 'lastUpdated' },
       { id: 'externalId', label: 'External id', value: 'externalId' },
       { id: 'externalType', label: 'External type', value: 'externalType' },
-     
       { id: 'c8y_AvailabilityStatus', label: 'Availability status', value: 'c8y_AvailabilityStatus' },
-      { id: 'c8y_ConnectionStatus',label: 'Connection status', value: 'c8y_ConnectionStatus' },
+      { id: 'c8y_ConnectionStatus', label: 'Connection status', value: 'c8y_ConnectionStatus' },
       { id: 'c8y_FirmwareName', label: 'Firmware name', value: 'c8y_FirmwareName' },
       { id: 'c8y_FirmwareVersion', label: 'Firmware version', value: 'c8y_FirmwareVersion' },
       { id: 'c8y_FirmwareVersionIssues', label: 'Firmware verison issues', value: 'c8y_FirmwareVersionIssues' },
       { id: 'c8y_FirmwareIssuesName', label: '', value: 'c8y_FirmwareVersionIssuesName' },
-      {
-        id: 'c8y_RequiredAvailabilityResponseInterval'
-        , label: 'Required availability', value: 'c8y_RequiredAvailabilityResponseInterval'
-      },
-    
+      {id: 'c8y_RequiredAvailabilityResponseInterval',label:'Required availability',value:'c8y_RequiredAvailabilityResponseInterval'},
       { id: 'c8y_ActiveAlarmsStatus', label: 'Active alarms status', value: 'c8y_ActiveAlarmsStatus' },
-   
     ];
     if (!this.config.fpProps) {
       this.config.fpProps = ['Availability', 'ActiveAlarmsStatus'];
@@ -233,7 +248,6 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
     if (!this.config.otherPropList) {
       this.config.otherPropList = [{ label: '', value: '' }];
     }
-
     this.props.setValue(this.config.fpProps);
     this.p1Props.get('p1Props').setValue(prop1);
     this.p2Props.get('p2Props').setValue(prop2);
@@ -244,17 +258,15 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
       this.p2DataSource.data = JSON.parse(JSON.stringify(this.p2Props.get('p2Props').value));
     }
 
-    if (this.config.realtime === undefined) {
-      this.config.realtime = false;
-    }
     if (this.config.isRuntimeExternalId === undefined) {
       this.config.isRuntimeExternalId = false;
     }
-    if (this.config.showChildDevices === undefined) {
-      this.config.showChildDevices = false;
+
+    if (this.config.showColumn2 === undefined) {
+      this.config.showColumn2 = false;
     }
-    
   }
+
 
   onP1Change() {
     this.p1DataSource.data = JSON.parse(JSON.stringify(this.p1Props.get('p1Props').value));
@@ -272,7 +284,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
   commitToP2PropsConfig(props) {
     this.config.p2Props = props.data;
   }
-  
+
   /**
    * Get All devices's device type
    */
@@ -302,13 +314,41 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
       this.config.otherPropList = [{ label: '', value: '' }];
     }
   }
-
   async ngDoCheck() {
-  
     if (this.config.device && this.config.device.id && this.config.device.id !== this.configDevice) {
       this.configDevice = this.config.device.id;
       this.getAllDevices(this.configDevice);
+      const context = this.config.device;
+      if (context?.id) {
+        this.datapointSelectionConfig.contextAsset = context;
+        this.datapointSelectionConfig.assetSelectorConfig
+      }
     }
+  }
+  onBeforeSave(): boolean | Promise<boolean> | Observable<boolean> {
+    if (this.formGroup.valid) {
+     
+      return true;
+    }
+    return false;
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  private initForm(): void {
+    this.formGroup = this.createForm();
+    this.form.form.addControl('config', this.formGroup);
+    if (this.config?.datapoints) {
+    
+      this.formGroup.patchValue({ datapoints: this.config.datapoints });
+    }
+  }
+  private createForm() {
+    return this.formBuilder.group({
+      datapoints: this.formBuilder.control(new Array<KPIDetails>(), [
+      ])
+    });
   }
   addProperty() {
     this.config.otherPropList.push({ label: '', value: '' });
@@ -324,6 +364,5 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit{
       this.config.dashboardList.push(dashboardObj);
     }
   }
-  
 }
 

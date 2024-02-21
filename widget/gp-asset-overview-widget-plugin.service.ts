@@ -19,15 +19,19 @@
 
 
 import { Injectable } from '@angular/core';
-import { AlarmService, IAlarm, IManagedObject, IManagedObjectBinary, IResult, IResultList, InventoryBinaryService, InventoryService, Severity } from '@c8y/client';
+import { AlarmService, IAlarm, IManagedObject, IManagedObjectBinary, IResult, IResultList, InventoryBinaryService, InventoryService, Severity,Realtime } from '@c8y/client';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class GpAssetOverviewWidgetService {
+  fetchData(childDevice: { id: string; }, displayedColumns: any) {
+    throw new Error('Method not implemented.');
+  }
 
-  constructor(private inventoryService: InventoryService, private inventoryBinaryService: InventoryBinaryService,
+  constructor(private inventoryService: InventoryService, private inventoryBinaryService: InventoryBinaryService,public realtimeService: Realtime,
+
     private alarmService: AlarmService) { }
  
   getAppId() {

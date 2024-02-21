@@ -24,7 +24,7 @@ li>span:hover {
     cursor: pointer;
 }
 .card {
-    padding: 0px 0px 0px 9px;
+    padding: 0px 0px 0px 12px;
     box-shadow: none;
     
 }
@@ -41,11 +41,7 @@ li>span:hover {
     display: inline-block;
     margin-top: 5px;
 }
-.iconClass {
-    position: relative;
-    top: -3px;
-    cursor: pointer;
-}
+
 .assetCard {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -126,7 +122,7 @@ li>span:hover {
 td {
     border-bottom: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 6px;
 }
 .active>div {
     background-color:rgb(68 189 193);
@@ -209,4 +205,27 @@ ul li:last-child:after {
 .btn-clean
 {
     padding: 7px;
+}
+
+.arrow-up-degree
+{
+    transform:rotate(45deg);
+}
+
+.arrow-down-degree
+{
+    transform:rotate(145deg);
+}
+.border-bottom-none
+{
+    border-bottom: none !important;
+}
+.pointer:hover{
+    cursor: pointer;
+}
+.dot.dot-30 {
+    font-size: 14px;
+    width: 26px;
+    height: 26px;
+    line-height: 32px;
 }
