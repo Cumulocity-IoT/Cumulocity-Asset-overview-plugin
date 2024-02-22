@@ -48,8 +48,6 @@ import { ContextWidgetConfig } from '@c8y/ngx-components/context-dashboard';
   exports: [IconSelectorComponent, GpAssetOverviewWidgetService],
   providers: [
      hookComponent({
-      
-      
         id: 'global-presales-asset-overview-plugin',
         label: 'Asset Overview',
         description: 'The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards',
@@ -71,5 +69,4 @@ import { ContextWidgetConfig } from '@c8y/ngx-components/context-dashboard';
       })
   ]
 })
-
 export class GpAssetOverviewWidgetPluginModule { }

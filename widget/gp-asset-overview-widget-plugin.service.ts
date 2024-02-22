@@ -20,20 +20,12 @@
 
 import { Injectable } from '@angular/core';
 import { AlarmService, IAlarm, IManagedObject, IManagedObjectBinary, IResult, IResultList, InventoryBinaryService, InventoryService, Severity,Realtime } from '@c8y/client';
-
-
 @Injectable({
   providedIn: 'root',
 })
 export class GpAssetOverviewWidgetService {
-  fetchData(childDevice: { id: string; }, displayedColumns: any) {
-    throw new Error('Method not implemented.');
-  }
-
   constructor(private inventoryService: InventoryService, private inventoryBinaryService: InventoryBinaryService,public realtimeService: Realtime,
-
-    private alarmService: AlarmService) { }
- 
+    private alarmService: AlarmService) {}
   getAppId() {
     const currentURL = window.location.href;
     const routeParam = currentURL.split('#');
@@ -56,9 +48,7 @@ export class GpAssetOverviewWidgetService {
   */
   getChildAssets(id: string, pageToGet: number, allDevices: { data: any[], res: any }): Promise<IResultList<IManagedObject>> {
     const inventoryFilter = {
-     
       pageSize: 50,
-      
       withTotalPages: true,
       query: '',
       currentPage: pageToGet
@@ -103,7 +93,6 @@ export class GpAssetOverviewWidgetService {
   */
   getChildDevices(id: string, pageToGet: number, allDevices: { data: any[], res: any }): Promise<IResultList<IManagedObject>> {
     const inventoryFilter = {
-   
       pageSize: 50,
       withTotalPages: true,
       query: '',
@@ -136,12 +125,9 @@ export class GpAssetOverviewWidgetService {
             }
           });
       });
-
     }
-    
     async getDeviceList(referenceId: any, pageSize: any, currentPage: any, onlyChildDevice: boolean, deviceType) {
-      let queryString = '';
-    
+      let queryString = ''; 
       let response: any = null;
       const filter: object = {
         pageSize,
@@ -182,13 +168,10 @@ export class GpAssetOverviewWidgetService {
       withSourceAssets: true,
       withSourceDevices: true
     }
-
     const alarms = (await this.alarmService.list(filter)).data;
     const alarmCount = this.calculateAlarmCounts(alarms);
-
     return alarmCount;
   }
-
   private calculateAlarmCounts(alarms: IAlarm[]): {
     minor: number,
     major: number,

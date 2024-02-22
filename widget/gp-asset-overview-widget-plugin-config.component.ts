@@ -23,16 +23,15 @@ import { DefaultSelectionModelFactory } from '../widget/icon-selector/selection-
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
 import { InventoryService } from '@c8y/client';
 import { MatTableDataSource } from '@angular/material/table';
-
 import {
   DatapointAttributesFormConfig,
   DatapointSelectorModalOptions,
   KPIDetails,
 } from '@c8y/ngx-components/datapoint-selector';
-
 import { takeUntil } from 'rxjs/operators';
 import { OnBeforeSave } from '@c8y/ngx-components';
 import { Observable, Subject } from 'rxjs';
+
 
 export function exactlyASingleDatapointActive(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -72,7 +71,6 @@ export interface DashboardConfig {
 export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnBeforeSave {
   propertiesToDisplay: Property[] = [];
   @Input() config: any = {};
-
   appId = null;
   managedObject: any;
   configDevice = '';
@@ -106,11 +104,9 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
   otherPropList: boolean = false;
   selected: any;
   otherProp: boolean;
-
   datapointSelectDefaultFormOptions: Partial<DatapointAttributesFormConfig> = {
     showRange: false,
     showChart: false,
-
   };
   datapointSelectionConfig: Partial<DatapointSelectorModalOptions> = {};
   formGroup: ReturnType<GPAssetOverviewWidgetPluginConfig['createForm']>;
@@ -120,9 +116,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
     private fb: FormBuilder,
     private form: NgForm,
     private formBuilder: FormBuilder) { }
-
   async ngOnInit(): Promise<void> {
- 
     if (this.config.device && this.config.device.id) {
       this.configDevice = this.config.device.id;
       this.datapointSelectionConfig.contextAsset = this.config.device;
@@ -134,9 +128,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
       .subscribe((value) => {
         this.config.datapoints = [...value.datapoints];
       });
-
     this.appId = this.deviceList.getAppId();
-
     if (!this.config.configDashboard) {
       this.config.configDashboard = false;
     }
@@ -261,13 +253,10 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
     if (this.config.isRuntimeExternalId === undefined) {
       this.config.isRuntimeExternalId = false;
     }
-
     if (this.config.showColumn2 === undefined) {
       this.config.showColumn2 = false;
     }
   }
-
-
   onP1Change() {
     this.p1DataSource.data = JSON.parse(JSON.stringify(this.p1Props.get('p1Props').value));
     this.config.p1Props = this.p1Props.get('p1Props').value;
@@ -276,15 +265,12 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
     this.p2DataSource.data = JSON.parse(JSON.stringify(this.p2Props.get('p2Props').value));
     this.config.p2Props = this.p2Props.get('p2Props').value;
   }
-
   commitToP1PropsConfig(props) {
     this.config.p1Props = props.data;
   }
-
   commitToP2PropsConfig(props) {
     this.config.p2Props = props.data;
   }
-
   /**
    * Get All devices's device type
    */
@@ -326,8 +312,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
     }
   }
   onBeforeSave(): boolean | Promise<boolean> | Observable<boolean> {
-    if (this.formGroup.valid) {
-     
+    if (this.formGroup.valid) {  
       return true;
     }
     return false;

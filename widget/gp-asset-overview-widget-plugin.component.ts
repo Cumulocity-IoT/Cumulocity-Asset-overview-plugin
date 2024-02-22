@@ -418,8 +418,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   isAlertWarning(alarm) {
     return (alarm && alarm.warning && alarm.warning > 0);
   }
-
-
   loadText(alarm) {
     let alarmsStatus = '';
     if (alarm) {
@@ -539,8 +537,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
             if (response && response.data) {
               const measurementData = response.data;
               if (measurementData.data) {
-                const msmt = measurementData.data;
-            
+                const msmt = measurementData.data;         
                 for(let item of data.values)
                 {
                   if(msmt[item.fragment] && msmt[item.fragment][item.series])
@@ -549,42 +546,29 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
                   item.currValue = msmt[item.fragment][item.series].value;
                   }
                 }
-                
               }
             }
-          
           })
           this.allSubscriptions.push({
             id: data.id,
             subs: realTimeMeasurementSub,
             type: 'Measurements',
           });
-        
-
       }
     }
-
   }
-
-
-
   async onPageSizeChange() {
-
     this.dataSource = [];
     this.matData = [];
-
     this.isBusy = true;
     this.assetTreeNodeService.resetTree();
     let inventory = await this.inventoryService.detail(this.configDevice);
     this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
     this.dataSource = [this.rootNode];
-
     this.matData = true;
     await this.getAllDevices(this.rootNode, this.configDevice);
     this.isBusy = false;
-  
   }
-
   getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
   addMonths = (inputDate, months) => {
     const date = new Date(inputDate)
@@ -594,44 +578,31 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     return date
   }
   async getMeasurements() {
-this.measurementsLoading=true;
-
+  this.measurementsLoading=true;
     let now = moment().toISOString();
     let sixMonthsPrior = moment().add(-6, 'months').toISOString();
     for (let data of this.matData) {
       const manaogedObjectChannel = `/managedobjects/${data.id}`;
-     
-
-      const details = this.realtimeService.subscribe('', response => {
-      })
       const filter: ISeriesFilter = {
         dateFrom: sixMonthsPrior,
         dateTo: now,
         source: data.id
       };
       let messurements = await this.measurementService.listSeries(filter);
-      
-
       data['measurements'] = messurements.data.series;
-     
-      await this.getValues(data);
-     
+      await this.getValues(data);     
     }
       this.measurementsLoading=false;
   }
   async getValues(data) {
-    
     let now = moment().toISOString();
     let sixMonthsPrior = moment().add(-6, 'months').toISOString();
-
     this.values = [];
     if (this.config.datapoints && data.measurements && data.measurements.length > 0) {
       for (let datapoint of this.config.datapoints) {
         for (let measurement of data.measurements) {
           if (datapoint.fragment == measurement.type && datapoint.series == measurement.name) {
-           
             const msmtFilter = {
-
               pageSize: 2,
               valueFragmentSeries: measurement.name,
               valueFragmentType: measurement.type,
@@ -641,14 +612,8 @@ this.measurementsLoading=true;
               revert: true,
               source: data.id
             };
-
             let mesListResponse = (await (this.measurementService.list(msmtFilter)));
-            
-            
             this.values.push({ fragment: datapoint.fragment, series: datapoint.series, label: datapoint.label, currValue: mesListResponse.data[0][datapoint.fragment][datapoint.series].value, prevValue: mesListResponse.data[1][datapoint.fragment][datapoint.series].value, unit: mesListResponse.data[0][datapoint.fragment][datapoint.series].unit });
-           
-
-            
           }
         }
       }

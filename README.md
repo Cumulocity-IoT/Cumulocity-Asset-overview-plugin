@@ -15,8 +15,9 @@ in the table view along with the navigation to the dashboards.
 
 <kbd>![Asset-Overview](assets/overview.PNG) </kbd>
 
+<kbd>![Asset-Overview](assets/asset-overview-new.PNG)</kbd>
 
-<kbd>![Asset-Overview-Config](assets/config.PNG) </kbd>
+<kbd>![Asset-Overview-Config](assets/config1.PNG) </kbd>
 
 
 ## Features
@@ -27,11 +28,23 @@ in the table view along with the navigation to the dashboards.
 
 *  **Pagination:** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
      
-*  **Configurable Columns:** User can choose what to display in each page of tiles from available list.
+*  **Configurable Columns:** User can choose what to display in each column of tiles from available list.
 
 *  **Dashboard Settings (App Builder only):** Ability to navigate to dashboard by providing dashboard Id.
 
 *  **Custom Icon:**  Select and upload the icon for the device where default image is not available.
+
+*  **Add Data point:**  Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
+
+*  **Enable Column 2 Settings:** For the column 2 either the user can choose the configurable columns or can select the data points for the device or assets.
+
+*  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
+
+**Asset Overview On Screen Options:**
+
+-   **Realtime**  : On/Off Realtime option.
+-   **Refresh**: Useful for force reload/refresh devices.
+-   **Pagination**: Page navigation options.
 
 
 ## Prerequisites:
@@ -73,6 +86,8 @@ Congratulations! Asset Overview is configured.
 *   **Upload Default Icon For Device:** User can select the drop down upload the icon for the device where default image is not available
 *  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI
 *  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI
+*  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
+
 *  **Refresh:** Useful for force reload/refresh devices.
 *  **Dashboard Settings(Application Builder/Blue Print Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.

@@ -1,7 +1,6 @@
-    .input-width {
+.input-width {
         width:100%;
     }
-
 .asset-overview-accordion {
     padding-bottom:10px;
 }
@@ -17,19 +16,8 @@
 .asset-overview-mt-10 {
     margin-top: 10px;
 }
-.c8y-switch
+.switch
 {
     overflow: visible;
-}
-.dlt-c8y-icon{
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    font-family: dlt-c8y-icons!important;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 400;
-    line-height: 1;
-    text-transform: none;
 }
 

@@ -18,7 +18,7 @@
             <span [ngClass]="realtimeState?'c8y-pulse active' : 'c8y-pulse inactive'"></span>
             <span>Realtime</span>
           </button>
-          
+
         </div>
         <div class="refresh-panel">
           <button type="button" class="btn btn-clean" (click)="refresh()"><i c8yIcon="refresh"></i></button>
@@ -132,29 +132,29 @@
                     </ng-container>
                   </tbody>
                 </table>
-                
-                <ng-template #measurements >
-                  <div *ngIf= "!measurementsLoading; else loading">
-                  <ng-container *ngIf="data.values && data.values.length > 0; else noMeasurements" >
-                    <table >
-                      <ng-container *ngFor="let value of data.values">
-                        
-                        <tr>
-                          <td class="border-bottom-none">{{ value.label }}: </td>
-                          <td class="border-bottom-none" style=" font-size: 15px;">{{ value.currValue}} </td>
-                          <td class="border-bottom-none" style="color: #220354;;">{{value.unit}}</td>
-                          <div class="dot dot-info dot-30 flex-no-shrink" style="margin-top: 6px;">
-                            <i c8yicon="arrow-dotted-up" class="icon-8 dlt-c8y-icon-arrow-dotted-up"
-                              [ngClass]="isPrevGreater(value) ? 'arrow-down-degree' : 'arrow-up-degree'"
-                              title="Previous value:{{value.prevValue}}"></i>
-                          </div>
-                        </tr>
-                      </ng-container>
-                    </table>
-                  </ng-container>
+
+                <ng-template #measurements>
+                  <div *ngIf="!measurementsLoading; else loading">
+                    <ng-container *ngIf="data.values && data.values.length > 0; else noMeasurements">
+                      <table>
+                        <ng-container *ngFor="let value of data.values">
+
+                          <tr>
+                            <td class="border-bottom-none">{{ value.label }}: </td>
+                            <td class="border-bottom-none" style=" font-size: 15px;">{{ value.currValue}} </td>
+                            <td class="border-bottom-none" style="color: #220354;;">{{value.unit}}</td>
+                            <div class="dot dot-info dot-30 flex-no-shrink" style="margin-top: 6px;">
+                              <i c8yicon="arrow-dotted-up" class="icon-8 dlt-c8y-icon-arrow-dotted-up"
+                                [ngClass]="isPrevGreater(value) ? 'arrow-down-degree' : 'arrow-up-degree'"
+                                title="Previous value:{{value.prevValue}}"></i>
+                            </div>
+                          </tr>
+                        </ng-container>
+                      </table>
+                    </ng-container>
                   </div>
                   <ng-template #loading>
-                   <c8y-loading></c8y-loading>
+                    <c8y-loading></c8y-loading>
                   </ng-template>
                   <ng-template #noMeasurements>
                     <p style="padding-top:75px;">Measurements are not selected.</p>
