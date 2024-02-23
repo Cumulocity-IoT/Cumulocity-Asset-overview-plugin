@@ -1,4 +1,4 @@
-# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.0.0/sag-ps-pkg-asset-overview-1.0.0.zip)
+# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.0/sag-ps-pkg-asset-overview-1.1.0.zip)
 
 The Asset Overview Widget Plugin is the Cumulocity module federation plugin created using c8ycli.This plugin can be used 
 in Application Builder or Cockpit.The Asset Overview Plugin helps you to display assets/devices in tree structure and data 
@@ -30,7 +30,9 @@ in the table view along with the navigation to the dashboards.
      
 *  **Configurable Columns:** User can choose what to display in each column of tiles from available list.
 
-*  **Dashboard Settings (App Builder only):** Ability to navigate to dashboard by providing dashboard Id.
+*  **Dashboard Settings (App Builder /Blue Print Forge):** Ability to navigate to dashboard by providing dashboard Id.
+
+*  **Dashboard Navigation(Cockpit Only):** Asset overview supports the navigation for the cockpit application.User can click on the image of the device/asset and can navigate to the device dashboard.
 
 *  **Custom Icon:**  Select and upload the icon for the device where default image is not available.
 
@@ -55,7 +57,7 @@ in the table view along with the navigation to the dashboards.
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.0.0/sag-ps-pkg-asset-overview-1.0.0.zip) and install via Administrations --> Ecosystems  --> Extensions
+* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.0/sag-ps-pkg-asset-overview-1.1.0.zip) and install via Administrations --> Ecosystems  --> Extensions
 
 ## QuickStart
 
@@ -84,10 +86,10 @@ Congratulations! Asset Overview is configured.
 *  **UI Pagination:** User can select the page size from the UI using the drop down.
 *  **Config Pagination:** User can select the page size from the configaration you can edit the plugin and set the page size.
 *   **Upload Default Icon For Device:** User can select the drop down upload the icon for the device where default image is not available
-*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI
-*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI
+*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI.
+*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI.In Case if we need to display Measurements for the device.you can add data points and the column2 settings will be disabled.
+*  **Add Data point:**  Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
 *  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
-
 *  **Refresh:** Useful for force reload/refresh devices.
 *  **Dashboard Settings(Application Builder/Blue Print Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
@@ -95,7 +97,10 @@ Congratulations! Asset Overview is configured.
     * **DeviceId as TabGroup:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
     * **TabGroup ID(optional):** If your dashboard is based on tabgroup then provide tabgroup id.
 
-------------------------------
+*  **Dashboard Navigation(Cockpit Only):** User can click on the image of the device/asset and can navigate to the device dashboard.
+
+
+---------------------------------
 
 This widget is provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
 _____________________
