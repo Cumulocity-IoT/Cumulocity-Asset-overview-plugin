@@ -3,8 +3,8 @@
   "version": "1.1.0",
   "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
   "scripts": {
-    "start": "c8ycli server -u https://appbuilder.eu-latest.cumulocity.com/",
-    "build": "c8ycli build --env.mode=development",
+    "start": "c8ycli server",
+    "build": "c8ycli build --env.mode=production",
     "deploy": "c8ycli deploy",
     "postinstall": "ngcc",
     "prebuild": " gulp clean",
