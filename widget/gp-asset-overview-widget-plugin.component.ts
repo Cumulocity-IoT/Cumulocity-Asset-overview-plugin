@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { Component, Input, OnInit } from '@angular/core';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
-
-import { IManagedObject, InventoryService } from '@c8y/client';
+import { IManagedObject, ISeriesFilter, InventoryService, MeasurementService, Realtime } from '@c8y/client';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as ImageData from './gp-default-image';
 import { Router } from '@angular/router';
 import { assetTreeNodeService } from './gp-asset-tree.service';
+import * as moment from "moment";
 import * as _ from 'lodash';
+
 export interface Node {
   id: number;
   visible: boolean;
@@ -55,9 +55,7 @@ export interface DeviceData {
   externalId?: string;
   externalType?: string;
   c8y_ActiveAlarmsStatus?: any;
-
 }
-
 @Component({
   selector: 'gp-asset-overview-widget-plugin',
   templateUrl: 'gp-asset-overview-widget-plugin.html',
@@ -65,6 +63,7 @@ export interface DeviceData {
   imports: [],
 })
 export class GPAssetOverviewWidgetPluginComponent implements OnInit {
+
   selectedInputs: any[] = []; // Assuming your selected inputs are stored in this array
   selectedInputLabels: string[] = []; // Assuming corresponding labels are stored here
   groupedInputs: any[][] = [];
@@ -91,19 +90,27 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   pageSize = 5;
   totalRecord = -1;
   isMorePages = true;
-
+  measurementType: any;
+  deviceId: any;
+  realtimeState = true;
+  realTimeDeviceSub: object;
+  iconClass: string;
+  realtimeValues: any[] = [];
+  private subs: object;
+  measurementsLoading: boolean=true;
+  values: any;
 
   constructor(
-    private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService,
-    private sanitizer: DomSanitizer, private router: Router, private assetTreeNodeService: assetTreeNodeService) {
+    private deviceList: GpAssetOverviewWidgetService, private inventoryService: InventoryService, private realtimeService: Realtime,
+    private sanitizer: DomSanitizer, private router: Router, private assetTreeNodeService: assetTreeNodeService, private measurementService: MeasurementService) {
   }
-  async ngOnInit() {
 
+  async ngOnInit() {
+   
     this.appId = await this.deviceList.getAppId();
     if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
       this.pageSize = Number(this.config.pageSize);
     }
-
     if (!this.config.device) {
       this.config.device = {};
     }
@@ -116,7 +123,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.dataSource = [this.rootNode];
       this.isBusy = true;
       await this.getAllDevices(this.rootNode, this.configDevice);
-
     }
     if (this.config.markerIcon !== null && this.config.markerIcon !== undefined) {
       this.markerIcon = this.config.markerIcon;
@@ -136,14 +142,10 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.displayedColumnsForList.splice(index, 1);
     }
     this.configDashboardList = this.config.dashboardList;
-
     // Assuming you have some logic to populate selectedInputs and selectedInputLabels arrays
-
     // Split selectedInputs and selectedInputLabels into groups of five
     this.groupedInputs = this.chunkArray(this.selectedInputs, 5);
     this.groupedLabels = this.chunkArray(this.selectedInputLabels, 5);
-
-
   }
 
   // Function to split array into chunks
@@ -154,13 +156,19 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     }
     return chunkedArray;
   }
-
+  navigateUrlExists(deviceType: string) {
+    if (this.appId && this.config.dashboardList) {
+      const dashboardObj = this.config.dashboardList.find((dashboard) => dashboard.type === 'All' || dashboard.type === deviceType);
+      if (dashboardObj && dashboardObj.templateID)
+        return true;
+    }
+    return false;
+  }
   // Navigate URL to dashboard if dashboard is exist
   navigateURL(deviceId: string, deviceType: string) {
-
     if (deviceType && this.appId) {
-
-      const dashboardObj = this.configDashboardList.find((dashboard) => dashboard.type === deviceType);
+     
+      const dashboardObj = this.config.dashboardList.find((dashboard) => dashboard.type === 'All' || dashboard.type === deviceType);
       if (dashboardObj && dashboardObj.templateID) {
         if (dashboardObj.withTabGroup) {
           this.router.navigate([
@@ -169,7 +177,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
           this.router.navigate([
             `/application/${this.appId}/tabgroup/${dashboardObj.tabGroupID}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         } else {
-
           this.router.navigate([`/application/${this.appId}/dashboard/${dashboardObj.templateID}/device/${deviceId}`]);
         }
       }
@@ -177,38 +184,27 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.router.navigate([`/device/${deviceId}`]);
     }
   }
-
   /**
      * Get All devices's device type
      */
   async getAllDevices(rootNode: any, deviceId: string, fromPagination?) {
-
-
     let allDevices: any = null;
     const assetResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Assets');
     allDevices = (assetResponse.data ? assetResponse.data : []);
-
     if (assetResponse.data && assetResponse.data.length > 0 && assetResponse.data.length < this.pageSize) {
       this.totalRecord = (this.pageSize * (assetResponse.paging.totalPages - 1)) + assetResponse.data.length;
-
     } else {
-
       this.totalRecord = this.pageSize * assetResponse.paging.totalPages;
     }
-
     const deviceResponse = await this.deviceList.getDeviceList(deviceId, this.pageSize, this.currentPage, true, 'Devices');
     allDevices = (deviceResponse.data ? allDevices.concat(deviceResponse.data) : allDevices);
-
     if (deviceResponse.data && deviceResponse.data.length > 0 && deviceResponse.data.length < this.pageSize) {
-
       this.totalRecord = this.totalRecord + (this.pageSize * (deviceResponse.paging.totalPages - 1)) + deviceResponse.data.length;
     } else {
-
       this.totalRecord = this.totalRecord + this.pageSize * deviceResponse.paging.totalPages;
     }
     if ((this.totalRecord < (this.currentPage * this.pageSize))) { this.isMorePages = false; }
     if (this.pageSize <= 5) { this.isMorePages = true }
-
     if (allDevices) {
       for (const asset of allDevices) {
         this.rootNode = this.assetTreeNodeService.insertChildNode(rootNode, asset)
@@ -217,20 +213,16 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       this.totalRecord = -1;
     }
     this.dataSource = [];
-
     this.dataSource = [this.rootNode];
-
     this.loadAssetData(rootNode);
-
     this.isBusy = false;
   }
-
   async getDeviceDetails(managedObjectId) {
     let deviceFound = await this.inventoryService.detail(managedObjectId);
     return deviceFound.data;
   }
+  
   async expandAsset(devices) {
-
     this.selectedAsset = devices?.deviceMO?.id;
     this.totalRecord = -1;
     this.currentPage = 1;
@@ -244,7 +236,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     if (devices.children && devices.children.length > 0) {
       devices.visible = !devices.visible;
     }
-
   }
 
   async loadAssetImage(image): Promise<SafeResourceUrl> {
@@ -259,21 +250,23 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       const binaryBlob = await response.blob();
       return this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(binaryBlob));
     }
-
     return this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + image);
   }
 
 
   async loadAssetData(asset: any) {
+   
+    
     this.selectedAsset = asset?.deviceMO?.id;
     this.matData = [];
     let deviceData = await this.mapAssetData(asset.deviceMO);
 
     this.matData.push(deviceData);
-    if (asset.children && asset.children.length > 0) {
+    if (/*this.config.showChildDevices &&*/ asset.children && asset.children.length > 0) {
       await this.loadChildAssets(asset.children);
-
+     
     }
+    this.getMeasurements()
   }
 
   /**
@@ -285,7 +278,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     await this.getAllDevices(devices, this.selectedAsset);
     devices.isLoading = false;
   }
-
   async mapAssetData(asset) {
     let deviceData: DeviceData = {};
     let alertDesc = {
@@ -318,13 +310,11 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     deviceData.c8y_FirmwareVersionIssues = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssues) ? asset.c8y_Firmware.versionIssues : 'Not available';
     deviceData.c8y_FirmwareVersionIssuesName = (asset.c8y_Firmware && asset.c8y_Firmware.versionIssuesName) ? asset.c8y_Firmware.versionIssuesName : 'Not available';
     deviceData.c8y_AvailabilityStatus = availability;
-
     deviceData.alertDetails = alertDesc;
     if ((this.config.p1Props === 'Other' || this.config.p2Props === 'Other') && this.getTheValue(asset, this.otherProp.value) !== undefined) {
       deviceData.other = this.getTheValue(asset, this.otherProp.value);
       deviceData.other = JSON.stringify(deviceData.other);
     }
-
     if ((this.config.p1Props === 'other' || this.config.p2Props === 'other') && this.getTheValue(asset, this.otherProp.value) !== undefined) {
       deviceData.other = this.getTheValue(asset, this.otherProp.value);
       deviceData.other = JSON.stringify(deviceData.other);
@@ -337,7 +327,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     }
     return deviceData;
   }
-
   loadChildAssets(childAssets) {
     if (childAssets) {
       childAssets.forEach(async (data) => {
@@ -346,7 +335,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
       })
     }
   }
-
 
   toDotNotation(obj, res = {}, current = '') {
     for (const key in obj) {
@@ -360,11 +348,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     }
     return res;
   }
-
-
   isAlerts(alarm) {
     if (alarm === undefined) { return false; }
-
     return (alarm.critical && alarm.critical > 0) || (alarm.major && alarm.major > 0)
       || (alarm.minor && alarm.minor > 0)
       || (alarm.warning && alarm.warning > 0);
@@ -433,8 +418,6 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   isAlertWarning(alarm) {
     return (alarm && alarm.warning && alarm.warning > 0);
   }
-
-
   loadText(alarm) {
     let alarmsStatus = '';
     if (alarm) {
@@ -522,13 +505,9 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     let inventory = await this.inventoryService.detail(this.configDevice);
     this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
     this.dataSource = [this.rootNode];
-
-
     this.matData = true;
     this.getAllDevices(this.rootNode, this.configDevice);
-
     this.isBusy = false;
-
   }
   /**
    * Clear all Realtime subscriptions
@@ -536,29 +515,115 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   private clearSubscriptions() {
     if (this.allSubscriptions) {
       this.allSubscriptions.forEach((s) => {
-
+        this.realtimeService.unsubscribe(s.subs);
       });
     }
   }
-
-
+  toggle() {
+    this.realtimeState = !this.realtimeState;
+    if (this.realtimeState) {
+      this.realTimeMeasurements();
+    } else {
+      this.clearSubscriptions();
+    }
+  }
+  private realTimeMeasurements() {
+    for (let data of this.matData) {
+      if (data.values && data.values.length > 0) {
+        const measurementChannel = `/measurements/${data.id}`;
+        const realTimeMeasurementSub = this.realtimeService.subscribe(
+          measurementChannel,
+          (response) => {
+            if (response && response.data) {
+              const measurementData = response.data;
+              if (measurementData.data) {
+                const msmt = measurementData.data;         
+                for(let item of data.values)
+                {
+                  if(msmt[item.fragment] && msmt[item.fragment][item.series])
+                  {
+                    item.prevValue = item.currValue;
+                  item.currValue = msmt[item.fragment][item.series].value;
+                  }
+                }
+              }
+            }
+          })
+          this.allSubscriptions.push({
+            id: data.id,
+            subs: realTimeMeasurementSub,
+            type: 'Measurements',
+          });
+      }
+    }
+  }
   async onPageSizeChange() {
-
     this.dataSource = [];
     this.matData = [];
-
     this.isBusy = true;
     this.assetTreeNodeService.resetTree();
     let inventory = await this.inventoryService.detail(this.configDevice);
     this.rootNode = this.assetTreeNodeService.createRoot(inventory.data, true, true);
     this.dataSource = [this.rootNode];
-
     this.matData = true;
     await this.getAllDevices(this.rootNode, this.configDevice);
     this.isBusy = false;
-
-
-
   }
-
+  getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
+  addMonths = (inputDate, months) => {
+    const date = new Date(inputDate)
+    date.setDate(1)
+    date.setMonth(date.getMonth() + months)
+    date.setDate(Math.min(inputDate.getDate(), this.getDaysInMonth(date.getFullYear(), date.getMonth() + 1)))
+    return date
+  }
+  async getMeasurements() {
+  this.measurementsLoading=true;
+    let now = moment().toISOString();
+    let sixMonthsPrior = moment().add(-6, 'months').toISOString();
+    for (let data of this.matData) {
+      const manaogedObjectChannel = `/managedobjects/${data.id}`;
+      const filter: ISeriesFilter = {
+        dateFrom: sixMonthsPrior,
+        dateTo: now,
+        source: data.id
+      };
+      let messurements = await this.measurementService.listSeries(filter);
+      data['measurements'] = messurements.data.series;
+      await this.getValues(data);     
+    }
+      this.measurementsLoading=false;
+  }
+  async getValues(data) {
+    let now = moment().toISOString();
+    let sixMonthsPrior = moment().add(-6, 'months').toISOString();
+    this.values = [];
+    if (this.config.datapoints && data.measurements && data.measurements.length > 0) {
+      for (let datapoint of this.config.datapoints) {
+        for (let measurement of data.measurements) {
+          if (datapoint.fragment == measurement.type && datapoint.series == measurement.name) {
+            const msmtFilter = {
+              pageSize: 2,
+              valueFragmentSeries: measurement.name,
+              valueFragmentType: measurement.type,
+              valueFragmentUnit: measurement.unit,
+              dateFrom: sixMonthsPrior,
+              dateTo: now,
+              revert: true,
+              source: data.id
+            };
+            let mesListResponse = (await (this.measurementService.list(msmtFilter)));
+            this.values.push({ fragment: datapoint.fragment, series: datapoint.series, label: datapoint.label, currValue: mesListResponse.data[0][datapoint.fragment][datapoint.series].value, prevValue: mesListResponse.data[1][datapoint.fragment][datapoint.series].value, unit: mesListResponse.data[0][datapoint.fragment][datapoint.series].unit });
+          }
+        }
+      }
+    }
+    data['values'] = this.values;
+  }
+  isPrevGreater(value): boolean {
+    if (value.prevValue > value.currValue) {
+      return true;
+    }
+    return false;
+  }
 }

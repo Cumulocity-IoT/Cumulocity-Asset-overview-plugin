@@ -23,7 +23,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GPAssetOverviewWidgetPluginComponent } from './gp-asset-overview-widget-plugin.component';
 import { GPAssetOverviewWidgetPluginConfig } from './gp-asset-overview-widget-plugin-config.component';
-import { FormsModule, CoreModule, HOOK_COMPONENTS, hookComponent } from '@c8y/ngx-components';
+import { FormsModule, CoreModule,hookComponent,DynamicComponentErrorStrategy} from '@c8y/ngx-components';
 import { MatTableModule } from '@angular/material/table';
 import * as preview from './preview-image';
 import { IconSelectorComponent } from '../widget/icon-selector/icon-selector.component';
@@ -31,6 +31,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GpAssetOverviewWidgetService } from './gp-asset-overview-widget-plugin.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 
+import { DatapointSelectorModule } from '@c8y/ngx-components/datapoint-selector';
+import { ContextWidgetConfig } from '@c8y/ngx-components/context-dashboard';
 @NgModule({
   declarations: [GPAssetOverviewWidgetPluginComponent, GPAssetOverviewWidgetPluginConfig, IconSelectorComponent],
   entryComponents: [GPAssetOverviewWidgetPluginComponent, GPAssetOverviewWidgetPluginConfig, IconSelectorComponent],
@@ -40,13 +42,12 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     CoreModule,
     NgSelectModule,
     MatTableModule,
+    DatapointSelectorModule,
     PaginationModule.forRoot()
   ],
   exports: [IconSelectorComponent, GpAssetOverviewWidgetService],
   providers: [
      hookComponent({
-      
-      
         id: 'global-presales-asset-overview-plugin',
         label: 'Asset Overview',
         description: 'The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards',
@@ -62,10 +63,10 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
               deviceTargetNotRequired: false,
               groupsSelectable: true
             }
-          }
+          }as ContextWidgetConfig,
+          errorStrategy: DynamicComponentErrorStrategy.CUSTOM,
         }
       })
   ]
 })
-
 export class GpAssetOverviewWidgetPluginModule { }

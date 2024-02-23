@@ -1,7 +1,6 @@
 .input-width {
-    width: 100%;
-}
-
+        width:100%;
+    }
 .asset-overview-accordion {
     padding-bottom:10px;
 }
@@ -17,6 +16,8 @@
 .asset-overview-mt-10 {
     margin-top: 10px;
 }
-
-
+.switch
+{
+    overflow: visible;
+}
 
