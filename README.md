@@ -15,7 +15,7 @@ in the table view along with the navigation to the dashboards.
 
 <kbd>![Asset-Overview](assets/overview.PNG) </kbd>
 
-<kbd>![Asset-Overview-New](assets/asset-overview-new.PNG)</kbd>
+<kbd>![Asset-Overview-New](assets/assetoverviewnew.PNG)</kbd>
 
 <kbd>![Asset-Overview-Config](assets/config1.PNG) </kbd>
 

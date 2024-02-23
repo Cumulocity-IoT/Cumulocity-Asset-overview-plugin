@@ -97,6 +97,10 @@
           "to": "assets/config.PNG"
         },
         {
+          "from": "assets/assetoverviewnew.PNG",
+          "to": "assets/assetoverviewnew.PNG"
+        },
+        {
           "from": "README.md",
           "to": "README.md"
         },
