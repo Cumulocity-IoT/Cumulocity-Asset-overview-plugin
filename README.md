@@ -15,38 +15,39 @@ in the table view along with the navigation to the dashboards.
 
 <kbd>![Asset-Overview](assets/overview.PNG) </kbd>
 
-<kbd>![Asset-Overview](assets/asset-overview-new.PNG)</kbd>
+<kbd>![Asset-Overview-New](assets/asset-overview-new.PNG)</kbd>
 
 <kbd>![Asset-Overview-Config](assets/config1.PNG) </kbd>
+
+## What's new?
+
+*  **Support Measurements:** Based on selected assets or devices, user can add datapoints for the device or asset. User can select max 10 data point which is applicable for selected device or assets.
+
+*  **Improved Column 2 Settings:** For the column 2 either the user can choose the configurable columns or can select the measurements for the device or assets.
+
+*  **Configurable Child View:** User can enable or disable the child view so that child of the device will expand in the tree structure.
+
+*  **Dashboard Navigation(Cockpit Only):** Asset overview supports the navigation for the cockpit application. User can click on the image of the device/asset and can navigate to the device dashboard.
+
+*  **Realtime**  : User can On/Off Realtime option.
+
+
 
 
 ## Features
 
-*  **Display Assets/Devices:** Display Assets/Devices in tree structure mode.It also supports child devices/assets.
+*  **Display Assets/Devices:** Display Assets/Devices in tree structure mode. It also supports child devices/assets.
 
-*  **Display Assets/Devices in Tree Structure:** We can expand and collapse the hierrachal view of the tree structure.
+*  **Display Assets/Devices in Tree Structure:** We can expand and collapse the hierarchical view of the tree structure.
 
-*  **Pagination:** Configurable Paginations and also option to set default page size.You can change the page size in the UI also
+*  **Pagination:** Configurable Paginations and option to set default page size. You can change the page size in the UI also
      
 *  **Configurable Columns:** User can choose what to display in each column of tiles from available list.
 
-*  **Dashboard Settings (App Builder /Blue Print Forge):** Ability to navigate to dashboard by providing dashboard Id.
+*  **Dashboard Settings (App Builder /Blueprint Forge):** Ability to navigate to dashboard by providing dashboard Id.
 
-*  **Dashboard Navigation(Cockpit Only):** Asset overview supports the navigation for the cockpit application.User can click on the image of the device/asset and can navigate to the device dashboard.
+*  **Custom Icon:** Ability to use the custom icon for the device.
 
-*  **Custom Icon:**  Select and upload the icon for the device where default image is not available.
-
-*  **Add Data point:**  Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
-
-*  **Enable Column 2 Settings:** For the column 2 either the user can choose the configurable columns or can select the data points for the device or assets.
-
-*  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
-
-**Asset Overview On Screen Options:**
-
--   **Realtime**  : On/Off Realtime option.
--   **Refresh**: Useful for force reload/refresh devices.
--   **Pagination**: Page navigation options.
 
 
 ## Prerequisites:
@@ -90,7 +91,7 @@ Congratulations! Asset Overview is configured.
 *  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI.In Case if we need to display Measurements for the device.you can add data points and the column2 settings will be disabled.
 *  **Add Data point:**  Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
 *  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
-*  **Refresh:** Useful for force reload/refresh devices.
+
 *  **Dashboard Settings(Application Builder/Blue Print Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
     * **Dashboard ID:** Dashboard ID of a dashboard where user need to navigate. You can find dashboard id in browser URL.
@@ -99,6 +100,11 @@ Congratulations! Asset Overview is configured.
 
 *  **Dashboard Navigation(Cockpit Only):** User can click on the image of the device/asset and can navigate to the device dashboard.
 
+**Asset Overview On Screen Options:**
+
+-   **Realtime**  : On/Off Realtime option.
+-   **Refresh**: Useful for force reload/refresh devices.
+-   **Pagination**: Page navigation options.
 
 ---------------------------------
 
