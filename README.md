@@ -21,15 +21,13 @@ in the table view along with the navigation to the dashboards.
 
 ## What's new?
 
-*  **Support Measurements:** Based on selected assets or devices, user can add datapoints for the device or asset. User can select max 10 data point which is applicable for selected device or assets.
+*  **Support Measurements:** Now Asset Overview plugin support realtime measurement. Measurement can be configurebale in column 2 settings.
 
 *  **Improved Column 2 Settings:** For the column 2 either the user can choose the configurable columns or can select the measurements for the device or assets.
 
-*  **Configurable Child View:** User can enable or disable the child view so that child of the device will expand in the tree structure.
+*  **Expandable View::** Now user can control hierarchical view based configuration to display child devices/assets
 
 *  **Dashboard Navigation(Cockpit Only):** Asset overview supports the navigation for the cockpit application. User can click on the image of the device/asset and can navigate to the device dashboard.
-
-*  **Realtime**  : User can On/Off Realtime measurements from UI.
 
 
 ## Features
@@ -80,27 +78,26 @@ Congratulations! Asset Overview is configured.
 
 ## User Guide
 
- 
-*  **Target assets or devices:** User can select a device/asset or device/asset group. If group is selected, list of devices/assets will be display in the tree strucure and details can be viewed in a table.
+ *  **Target assets or devices:** User can select a device/asset or device/asset group. If group is selected, list of devices/assets will be display in the tree structure and details can be viewed in a table.
 *  **UI Pagination:** User can select the page size from the UI using the drop down.
-*  **Config Pagination:** User can select the page size from the configaration you can edit the plugin and set the page size.
+*  **Config Pagination:** User can select the page size from the configuration you can edit the plugin and set the page size.
 *   **Upload Default Icon For Device:** User can select the drop down upload the icon for the device where default image is not available
-*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile.Based on that the asset or devices will be viewed as a table in the UI.
-*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile.Based on that the asset or devices will be viewed as a table in the UI.In Case if we need to display Measurements for the device.you can add data points and the column2 settings will be disabled.
-*  **Add Data point:**  Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
+*  **Column1 Settings:** User can select up to 5 fields to display in Column1 of tile. Based on that the asset or devices will be viewed as a table in the UI.
+*  **Column2 Settings:** User can select up to 5 fields to display in Column2 of tile. Based on that the asset or devices will be viewed as a table in the UI. In Case if we need to display Measurements for the device. You can add data points and the column2 settings will be disabled.
+*  **Add Data point:** Based on selected assets or devices, this field will be populated with available devices to select data points. User can select max 10 data point which is applicable for selected device or group of devices.
 *  **Expand Child View:** User can enable the child view so that child of the device will expand in the tree structure.
 
-*  **Dashboard Settings(Application Builder/Blue Print Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
+*  **Dashboard Settings(Application Builder/Blueprint Forge):** This feature is available only in application builder. User can navigate to any other dashboard by providing below details:
     * **Device Type:** Select a device type. Navigation will be applied to all devices/assets of this device/asset type to a specific dashboard.
     * **Dashboard ID:** Dashboard ID of a dashboard where user need to navigate. You can find dashboard id in browser URL.
-    * **DeviceId as TabGroup:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
-    * **TabGroup ID(optional):** If your dashboard is based on tabgroup then provide tabgroup id.
+    * **DeviceId as Tab Group:** Select this option only if you are using Group Template as dashboard in application builder and selected deviceId as tabgroup field during group template configuration.
+    * **TabGroup ID(optional):** If your dashboard is based on tab group then provide tab group id.
 
 *  **Dashboard Navigation(Cockpit Only):** User can click on the image of the device/asset and can navigate to the device dashboard.
 
 **Asset Overview On Screen Options:**
 
--   **Realtime**  : On/Off Realtime option.
+-   **Realtime** : On/Off Realtime option.
 -   **Refresh**: Useful for force reload/refresh devices.
 -   **Pagination**: Page navigation options.
 
