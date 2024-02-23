@@ -19,7 +19,7 @@ The Asset Overview Widget Plugin is the Cumulocity module federation plugin crea
 
 ## What's new?
 
-*  **Support Measurements:** Now Asset Overview plugin support realtime measurement. Measurement can be configurebale in column 2 settings.
+*  **Support Measurements:** Now Asset Overview plugin support realtime measurement. Measurement can be configurable in column 2 settings.
 
 *  **Improved Column 2 Settings:** For the column 2 either the user can choose the configurable columns or can select the measurements for the device or assets.
 
