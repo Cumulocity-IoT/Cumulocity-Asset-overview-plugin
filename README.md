@@ -29,9 +29,7 @@ in the table view along with the navigation to the dashboards.
 
 *  **Dashboard Navigation(Cockpit Only):** Asset overview supports the navigation for the cockpit application. User can click on the image of the device/asset and can navigate to the device dashboard.
 
-*  **Realtime**  : User can On/Off Realtime option.
-
-
+*  **Realtime**  : User can On/Off Realtime measurements from UI.
 
 
 ## Features
