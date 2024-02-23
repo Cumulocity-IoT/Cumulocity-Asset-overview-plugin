@@ -1,4 +1,4 @@
-# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.0.0/sag-ps-pkg-asset-overview-1.0.0.zip)
+# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.0/sag-ps-pkg-asset-overview-1.1.0.zip)
 
 The Asset Overview Widget Plugin is the Cumulocity module federation plugin created using c8ycli.This plugin can be used in Application Builder or Cockpit. The Asset Overview Plugin helps you to display assets/devices in tree structure and data in the table view along with the navigation to the dashboards.
 
@@ -52,7 +52,7 @@ The Asset Overview Widget Plugin is the Cumulocity module federation plugin crea
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.0.0/sag-ps-pkg-asset-overview-1.0.0.zip) and install via Administrations --> Ecosystems  --> Extensions
+* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.0/sag-ps-pkg-asset-overview-1.1.0.zip) and install via Administrations --> Ecosystems  --> Extensions
 
 ## QuickStart
 
