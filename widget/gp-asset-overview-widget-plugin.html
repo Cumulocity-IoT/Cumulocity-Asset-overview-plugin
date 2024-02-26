@@ -70,10 +70,9 @@
     <div class="col-md-9" *ngIf="!isBusy">
       <div *ngFor="let data of matData">
         <ng-container
-          *ngIf="data && data.id !== undefined && data.type!=='c8y_DeviceSubgroup' && data.type!=='c8y_DeviceGroup'">
+          *ngIf="data && data.id !== undefined && data.type!=='c8y_DeviceSubgroup'  && data.type!=='c8y_DeviceGroup'">
           <div class="card col-md-12 assetCard">
             <span class="assetName">{{data.name}}</span>
-            <hr style="margin-top: 5px;">
             <div class="">
               <div class="card-group">
                 <div class="card-dashboard first">
@@ -85,6 +84,7 @@
                       style="font-size:110px;max-width:185px;max-height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
                 </div>
                 <table class="two-column-table second">
+                
                   <tbody>
                     <ng-container *ngFor="let page1 of config.p1Props;">
                       <tr>
@@ -107,6 +107,7 @@
                       </tr>
                     </ng-container>
                   </tbody>
+              
                 </table>
 
                 <table class="two-column-table third" *ngIf="config.showColumn2; else measurements">

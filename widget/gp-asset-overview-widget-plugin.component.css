@@ -118,11 +118,7 @@ li>span:hover {
 .majorAlert {
     color: #e66400;
 }
-td {
-    border-bottom: 1px solid #dddddd;
-    text-align: left;
-    padding: 6px;
-}
+
 .active>div {
     background-color:rgb(68 189 193);
 }
@@ -228,3 +224,8 @@ ul li:last-child:after {
     height: 26px;
     line-height: 32px;
 }
+.border-bottom-none{
+    padding-top:14px;
+    padding: 4px;
+}
+

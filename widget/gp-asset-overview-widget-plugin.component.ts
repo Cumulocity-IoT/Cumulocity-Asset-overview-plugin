@@ -267,7 +267,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
      
     }
     this.getMeasurements()
-  }
+     }
 
   /**
   * This method will called during page navigation
@@ -327,12 +327,13 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
     }
     return deviceData;
   }
-  loadChildAssets(childAssets) {
+  async loadChildAssets(childAssets) {
     if (childAssets) {
-      childAssets.forEach(async (data) => {
-        let deviceData = await this.mapAssetData(data?.deviceMO);
+    
+     for(let data of childAssets) {
+       let deviceData = await this.mapAssetData(data?.deviceMO);
         this.matData.push(deviceData);
-      })
+      }
     }
   }
 
