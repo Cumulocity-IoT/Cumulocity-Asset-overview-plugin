@@ -1,6 +1,6 @@
 {
   "name": "asset-overview-plugin",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
   "scripts": {
     "start": "c8ycli server",
