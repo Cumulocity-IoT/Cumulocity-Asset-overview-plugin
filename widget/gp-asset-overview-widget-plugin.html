@@ -1,4 +1,4 @@
-<body style="overflow: hidden;">
+<div style="overflow: hidden;">
   <div class="col-sm-12 " style="margin-bottom: 10px;display:flex; justify-content:end;align-items:end;">
     <div class="row">
       <label class="pageSize" class="control-label">Items per page</label>
@@ -7,9 +7,9 @@
           <select style="width: auto;" id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
             <option value="5">5</option>
             <option value="10">10</option>
-            <option value="15">20</option>
-            <option value="15">50</option>
-            <option value="15">100</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
             <!-- Add more options as needed -->
           </select>
         </div>
@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-</body>
+</div>
 <c8y-loading *ngIf="isBusy"></c8y-loading>
 <div class="card">
   <div class="row col-md-12 card-group">
@@ -76,9 +76,9 @@
             <div class="">
               <div class="card-group">
                 <div class="card-dashboard first">
-                  <span class="" *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"
+                  <span *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"
                     [ngClass]="{'pointer':navigateUrlExists(data.type)}"><img [src]="data.assetImage"
-                      style="width:125px; height:140px;margin-top: 10px;margin-left: 10px;"></span>
+                      style="height:140px;width:100%;margin-top: 10px;object-fit: contain;"></span>
                   <span class="" *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i
                       [c8yIcon]="markerIcon"
                       style="font-size:110px;max-width:185px;max-height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>

@@ -109,7 +109,8 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
    
     this.appId = await this.deviceList.getAppId();
     if (this.config.pageSize !== null && this.config.pageSize !== undefined) {
-      this.pageSize = Number(this.config.pageSize);
+      //this.pageSize = Number(this.config.pageSize);
+      this.pageSize = this.config.pageSize ? this.config.pageSize : this.pageSize;
     }
     if (!this.config.device) {
       this.config.device = {};
@@ -274,9 +275,9 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   */
   async getPageEvent(devices) {
     this.currentPage = this.currentPage + 1;
-    devices.isLoading = true;
+    //devices.isLoading = true;
     await this.getAllDevices(devices, this.selectedAsset);
-    devices.isLoading = false;
+   // devices.isLoading = false;
   }
   async mapAssetData(asset) {
     let deviceData: DeviceData = {};

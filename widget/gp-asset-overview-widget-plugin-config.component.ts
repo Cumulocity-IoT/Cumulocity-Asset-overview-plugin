@@ -122,6 +122,7 @@ export class GPAssetOverviewWidgetPluginConfig implements OnInit, OnDestroy, OnB
       this.datapointSelectionConfig.contextAsset = this.config.device;
       this.datapointSelectionConfig.assetSelectorConfig;
     }
+   
     this.initForm();
     this.formGroup.valueChanges
       .pipe(takeUntil(this.destroy$))
