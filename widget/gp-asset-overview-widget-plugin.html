@@ -77,11 +77,12 @@
               <div class="card-group">
                 <div class="card-dashboard first">
                   <span *ngIf="data.assetImage" (click)="navigateURL(data.id, data.type);"
-                    [ngClass]="{'pointer':navigateUrlExists(data.type)}"><img [src]="data.assetImage"
+                    [ngClass]="{'pointer':navigateUrlExists(data.type)}">
+                    <img [src]="data.assetImage"
                       style="height:140px;width:100%;margin-top: 10px;object-fit: contain;"></span>
                   <span class="" *ngIf="!data.assetImage" (click)="navigateURL(data.id, data.type);"><i
                       [c8yIcon]="markerIcon"
-                      style="font-size:110px;max-width:185px;max-height: 170px;margin-top: 10px;margin-left: 10px;"></i></span>
+                      style="font-size:100px;height:140px;margin-top: 10px;object-fit: contain;padding:24%;padding-top: 15px;"></i></span>
                 </div>
                 <table class="two-column-table second">
                 
