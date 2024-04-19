@@ -167,8 +167,7 @@ export class GPAssetOverviewWidgetPluginComponent implements OnInit {
   }
   // Navigate URL to dashboard if dashboard is exist
   navigateURL(deviceId: string, deviceType: string) {
-    if (deviceType && this.appId) {
-     
+    if ( this.appId && this.configDashboardList) {
       const dashboardObj = this.config.dashboardList.find((dashboard) => dashboard.type === 'All' || dashboard.type === deviceType);
       if (dashboardObj && dashboardObj.templateID) {
         if (dashboardObj.withTabGroup) {
