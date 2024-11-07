@@ -1,4 +1,9 @@
-# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.3/sag-ps-pkg-asset-overview-1.1.3.zip)
+# Deprecation notice
+This plugin is not further developed and it might break with upcoming Cumulocity IoT releases. Use it at your own risk.
+
+The repository is archived but feel free to fork & adapt it to your needs in a new repo.
+
+# Cumulocity Asset Overview Widget Plugin[<img width="35" src="https://user-images.githubusercontent.com/32765455/211497905-561e9197-18b9-43d5-a023-071d3635f4eb.png"/>](https://github.com/Cumulocity-IoT/Cumulocity-Asset-overview-plugin/releases/download/1.1.4/sag-ps-pkg-asset-overview-1.1.4.zip)
 
 The Asset Overview Widget Plugin is the Cumulocity module federation plugin created using c8ycli.This plugin can be used in Application Builder or Cockpit. The Asset Overview Plugin helps you to display assets/devices in tree structure and data in the table view along with the navigation to the dashboards.
 
@@ -52,7 +57,7 @@ The Asset Overview Widget Plugin is the Cumulocity module federation plugin crea
 
 ### Runtime Widget Deployment?
 
-* This widget support runtime deployment. Download [Runtime Binary](https://github.com/SoftwareAG/Cumulocity-Asset-overview-plugin/releases/download/1.1.3/sag-ps-pkg-asset-overview-1.1.3.zip) and install via Administrations --> Ecosystems  --> Extensions
+* This widget support runtime deployment. Download [Runtime Binary](https://github.com/Cumulocity-IoT/Cumulocity-Asset-overview-plugin/releases/download/1.1.4/sag-ps-pkg-asset-overview-1.1.4.zip) and install via Administrations --> Ecosystems  --> Extensions
 
 ## QuickStart
 
@@ -101,6 +106,6 @@ Congratulations! Asset Overview is configured.
 
 ---------------------------------
 
-This widget is provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+This widget is provided as-is and without warranty or support. They do not constitute part of the Cumulocity product suite. Users are free to use, fork and modify them, subject to the license agreement. While Cumulocity GmbH welcomes contributions, we cannot guarantee to include every contribution in the master project.
 _____________________
-For more information you can Ask a Question in the [TECH Community Forums](https://tech.forums.softwareag.com/tag/Cumulocity-IoT).
+

@@ -1,7 +1,7 @@
 {
   "name": "asset-overview-plugin",
-  "version": "1.1.3",
-  "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
+  "version": "1.1.4",
+  "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devices with the navigation to the dashboards",
   "scripts": {
     "start": "c8ycli server",
     "build": "c8ycli build --env.mode=production",
@@ -15,7 +15,7 @@
     "Plugin",
     "Widget"
   ],
-  "author": "Sandhya M - Software AG, Global Presales",
+  "author": "Sandhya M",
   "license": "Apache-2.0",
   "dependencies": {
     "@angular/animations": "15.2.7",
@@ -64,10 +64,10 @@
   "c8y": {
     "application": {
       "name": "Asset Overview Plugin",
-      "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
+      "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devices with the navigation to the dashboards",
       "contextPath": "sag-ps-pkg-asset-overview",
       "key": "sag-ps-pkg-asset-overview-application-key",
-      "globalTitle": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards",
+      "globalTitle": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devices with the navigation to the dashboards",
       "brandingEntry": "./widget/styles.less",
       "tabsHorizontal": true,
       "isPackage": true,
@@ -79,7 +79,7 @@
           "name": "Asset Overview widget plugin",
           "module": "GpAssetOverviewWidgetPluginModule",
           "path": "./widget/gp-asset-overview-widget-plugin.module.ts",
-          "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devies with the navigation to the dashboards"
+          "description": "The Asset Overview Plugin helps you to display the asset/devices in a tree structure along with the table view for details of the asset and devices with the navigation to the dashboards"
         }
       ],
       "remotes": {
